@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceAccounting.WebApi", "FinanceAccounting.WebApi\FinanceAccounting.WebApi.csproj", "{007DD981-B13C-4C6D-96FD-CA8A42CC140F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceAccounting.Logic", "FinanceAccounting.Logic\FinanceAccounting.Logic.csproj", "{B2FF1E02-C7CF-4903-ADA9-5D875EF42AA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceAccounting.DataAccess", "FinanceAccounting.DataAccess\FinanceAccounting.DataAccess.csproj", "{DA8022CA-6A8F-4CF5-922C-98934BDD5B0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{007DD981-B13C-4C6D-96FD-CA8A42CC140F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{007DD981-B13C-4C6D-96FD-CA8A42CC140F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{007DD981-B13C-4C6D-96FD-CA8A42CC140F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2FF1E02-C7CF-4903-ADA9-5D875EF42AA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2FF1E02-C7CF-4903-ADA9-5D875EF42AA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2FF1E02-C7CF-4903-ADA9-5D875EF42AA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2FF1E02-C7CF-4903-ADA9-5D875EF42AA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA8022CA-6A8F-4CF5-922C-98934BDD5B0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA8022CA-6A8F-4CF5-922C-98934BDD5B0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA8022CA-6A8F-4CF5-922C-98934BDD5B0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA8022CA-6A8F-4CF5-922C-98934BDD5B0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
