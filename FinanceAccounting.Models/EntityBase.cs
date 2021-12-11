@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace FinanceAccounting.DataAccess.Entities
+namespace FinanceAccounting.Models
 {
     public class EntityBase
     {
