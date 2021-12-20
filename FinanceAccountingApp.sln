@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceAccounting.Logic", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceAccounting.DataAccess", "FinanceAccounting.DataAccess\FinanceAccounting.DataAccess.csproj", "{DA8022CA-6A8F-4CF5-922C-98934BDD5B0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceAccounting.Models", "FinanceAccounting.Models\FinanceAccounting.Models.csproj", "{C62BCBA2-38CF-417D-8E16-4967D45A0560}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceAccounting.Models", "FinanceAccounting.Models\FinanceAccounting.Models.csproj", "{C62BCBA2-38CF-417D-8E16-4967D45A0560}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{04681DF6-92BD-4129-8972-D189C8340B74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceAccounting.DataAccess.Tests", "FinanceAccounting.DataAccess.Tests\FinanceAccounting.DataAccess.Tests.csproj", "{AA1FB33D-17DA-4383-B5FA-A9F5BA406515}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +37,16 @@ Global
 		{C62BCBA2-38CF-417D-8E16-4967D45A0560}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C62BCBA2-38CF-417D-8E16-4967D45A0560}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C62BCBA2-38CF-417D-8E16-4967D45A0560}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA1FB33D-17DA-4383-B5FA-A9F5BA406515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA1FB33D-17DA-4383-B5FA-A9F5BA406515}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA1FB33D-17DA-4383-B5FA-A9F5BA406515}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA1FB33D-17DA-4383-B5FA-A9F5BA406515}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AA1FB33D-17DA-4383-B5FA-A9F5BA406515} = {04681DF6-92BD-4129-8972-D189C8340B74}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B236347B-5609-4E1D-A0AC-16641E5E6320}

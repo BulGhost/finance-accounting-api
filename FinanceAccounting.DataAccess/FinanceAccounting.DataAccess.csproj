@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FinanceAccounting.Logic\FinanceAccounting.Logic.csproj" />
     <ProjectReference Include="..\FinanceAccounting.Models\FinanceAccounting.Models.csproj" />
   </ItemGroup>
 

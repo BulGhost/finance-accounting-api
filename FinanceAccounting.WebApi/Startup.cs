@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FinanceAccounting.DataAccess.DbContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinanceAccounting.WebApi
 {
@@ -26,6 +28,10 @@ namespace FinanceAccounting.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<BookkeepingDbContext>(options =>
+                options.UseSqlServer(connection, optionsBuilder => optionsBuilder.EnableRetryOnFailure()));
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

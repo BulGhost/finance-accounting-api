@@ -1,28 +1,29 @@
 ﻿using System;
-using FinanceAccounting.Models;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using FinanceAccounting.DataAccess.Exceptions;
+using FinanceAccounting.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace FinanceAccounting.DataAccess.EF
+namespace FinanceAccounting.DataAccess.DbContext
 {
-    public class BookkeepingContext : DbContext
+    public class BookkeepingDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
-        public BookkeepingContext(DbContextOptions<BookkeepingContext> options) : base(options)
+        public BookkeepingDbContext(DbContextOptions<BookkeepingDbContext> options) : base(options)
         {
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<IncomeCategory> IncomeCategories { get; set; }
-        public DbSet<ExpenseCategory> ExpenseCategories { get; set; }
-        public DbSet<IncomeRecord> IncomeRecords { get; set; }
-        public DbSet<ExpenseRecord> ExpenseRecords { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<BookkeepingUser> Users { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
-        public override int SaveChanges()
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                return base.SaveChanges();
+                return base.SaveChangesAsync(cancellationToken);
             }
             catch (RetryLimitExceededException ex)
             {
@@ -43,7 +44,9 @@ namespace FinanceAccounting.DataAccess.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //TODO: Set up delete behaviour??
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
