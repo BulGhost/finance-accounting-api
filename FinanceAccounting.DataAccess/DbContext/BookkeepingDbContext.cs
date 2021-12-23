@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using FinanceAccounting.DataAccess.Exceptions;
-using FinanceAccounting.Models;
+using FinanceAccounting.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -17,7 +17,7 @@ namespace FinanceAccounting.DataAccess.DbContext
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<BookkeepingUser> Users { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Operation> Operations { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FinanceAccounting.Logic\FinanceAccounting.Logic.csproj" />
-    <ProjectReference Include="..\FinanceAccounting.Models\FinanceAccounting.Models.csproj" />
+    <ProjectReference Include="..\FinanceAccounting.Application\FinanceAccounting.Application.csproj" />
+    <ProjectReference Include="..\FinanceAccounting.Domain\FinanceAccounting.Domain.csproj" />
   </ItemGroup>
 
 </Project>

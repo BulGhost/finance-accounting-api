@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FinanceAccounting.DataAccess.DbContext;
-using FinanceAccounting.Models;
+using FinanceAccounting.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -33,7 +33,7 @@ namespace FinanceAccounting.DataAccess.Initialization
         {
             string[] entities =
             {
-                typeof(Transaction).FullName,
+                typeof(Operation).FullName,
                 typeof(Category).FullName,
                 typeof(BookkeepingUser).FullName
             };
@@ -54,9 +54,8 @@ namespace FinanceAccounting.DataAccess.Initialization
             try
             {
                 ProcessInsert(context, context.Users, TestData.Users);
-                ProcessInsert(context, context.Transactions, TestData.Transactions);
-
-                AddCategoriesToUsers(context);
+                ProcessInsert(context, context.Categories, TestData.Categories);
+                ProcessInsert(context, context.Operations, TestData.Operations);
             }
             catch (Exception ex)
             {
@@ -89,21 +88,6 @@ namespace FinanceAccounting.DataAccess.Initialization
                     transaction.Rollback();
                 }
             });
-        }
-
-        private static void AddCategoriesToUsers(BookkeepingDbContext context)
-        {
-            foreach (BookkeepingUser user in context.Users
-                .Include(u => u.Categories))
-            {
-                var categories = context.Categories;
-                foreach (Category category in categories)
-                {
-                    user.Categories.Add(category);
-                }
-            }
-
-            context.SaveChanges();
         }
     }
 }

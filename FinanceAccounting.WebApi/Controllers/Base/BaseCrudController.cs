@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinanceAccounting.DataAccess.Exceptions;
-using FinanceAccounting.Logic.Interfaces.Repository;
-using FinanceAccounting.Models;
+using FinanceAccounting.Domain;
+using FinanceAccounting.Domain.Entities;
+using FinanceAccounting.Domain.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

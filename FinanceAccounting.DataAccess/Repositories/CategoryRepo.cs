@@ -1,10 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FinanceAccounting.DataAccess.DbContext;
 using FinanceAccounting.DataAccess.Repositories.Base;
-using FinanceAccounting.Logic.Interfaces.Repository;
-using FinanceAccounting.Models;
+using FinanceAccounting.Domain.Entities;
+using FinanceAccounting.Domain.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinanceAccounting.DataAccess.Repositories
@@ -19,22 +20,18 @@ namespace FinanceAccounting.DataAccess.Repositories
         {
         }
 
-        public Task<bool> IsCategoryWasAddedEarlierAsync(int userId, string categoryName, CancellationToken cancellationToken = default)
+        public Task<bool> IsCategoryExistsAsync(int userId, OperationType operationType, string categoryName, CancellationToken cancellationToken = default)
         {
             return Context.Users
-                .Where(u => u.Id == userId && u.Categories.Any(c => c.CategoryName == categoryName))
-                .AnyAsync(cancellationToken);
+                .Where(u => u.Id == userId)
+                .AnyAsync(u => u.Categories
+                    .Any(c => c.CategoryName == categoryName && c.Type == operationType), cancellationToken);
         }
 
-        public async Task AddCategoryToUser(int userId, Category category, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Category>> GetUserCategoriesAsync(int userId, OperationType operationType, CancellationToken cancellationToken = default)
         {
-            BookkeepingUser user = await Context.Users.FindAsync(userId);
-            Category existingCategory = await Table
-                .Where(c => c.CategoryName == category.CategoryName)
-                .SingleOrDefaultAsync(cancellationToken);
-
-            user.Categories.Add(existingCategory ?? category);
-            await Context.SaveChangesAsync(cancellationToken);
+            return await Table.Where(c => c.UserId == userId && c.Type == operationType)
+                .ToListAsync(cancellationToken);
         }
     }
 }

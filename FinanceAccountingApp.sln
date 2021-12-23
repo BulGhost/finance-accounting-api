@@ -5,15 +5,15 @@ VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceAccounting.WebApi", "FinanceAccounting.WebApi\FinanceAccounting.WebApi.csproj", "{007DD981-B13C-4C6D-96FD-CA8A42CC140F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceAccounting.Logic", "FinanceAccounting.Logic\FinanceAccounting.Logic.csproj", "{B2FF1E02-C7CF-4903-ADA9-5D875EF42AA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceAccounting.Application", "FinanceAccounting.Application\FinanceAccounting.Application.csproj", "{B2FF1E02-C7CF-4903-ADA9-5D875EF42AA7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceAccounting.DataAccess", "FinanceAccounting.DataAccess\FinanceAccounting.DataAccess.csproj", "{DA8022CA-6A8F-4CF5-922C-98934BDD5B0B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceAccounting.Models", "FinanceAccounting.Models\FinanceAccounting.Models.csproj", "{C62BCBA2-38CF-417D-8E16-4967D45A0560}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceAccounting.Domain", "FinanceAccounting.Domain\FinanceAccounting.Domain.csproj", "{C62BCBA2-38CF-417D-8E16-4967D45A0560}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{04681DF6-92BD-4129-8972-D189C8340B74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceAccounting.DataAccess.Tests", "FinanceAccounting.DataAccess.Tests\FinanceAccounting.DataAccess.Tests.csproj", "{AA1FB33D-17DA-4383-B5FA-A9F5BA406515}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceAccounting.DataAccess.Tests", "FinanceAccounting.DataAccess.Tests\FinanceAccounting.DataAccess.Tests.csproj", "{AA1FB33D-17DA-4383-B5FA-A9F5BA406515}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

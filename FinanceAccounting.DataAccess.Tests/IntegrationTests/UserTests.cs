@@ -4,7 +4,7 @@ using FinanceAccounting.DataAccess.Exceptions;
 using FinanceAccounting.DataAccess.Initialization;
 using FinanceAccounting.DataAccess.Repositories;
 using FinanceAccounting.DataAccess.Tests.Base;
-using FinanceAccounting.Logic.Interfaces.Repository;
+using FinanceAccounting.Domain.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
@@ -41,7 +41,7 @@ namespace FinanceAccounting.DataAccess.Tests.IntegrationTests
             var query = Context.Users
                 .Where(x => x.Id.CompareTo(2).Equals(1));
             var users = query.ToList();
-            Assert.Single(users);
+            Assert.Empty(users);
         }
     }
 }

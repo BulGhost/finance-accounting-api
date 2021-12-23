@@ -4,8 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using FinanceAccounting.DataAccess.DbContext;
 using FinanceAccounting.DataAccess.Exceptions;
-using FinanceAccounting.Logic.Interfaces.Repository;
-using FinanceAccounting.Models;
+using FinanceAccounting.Domain.Entities;
+using FinanceAccounting.Domain.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinanceAccounting.DataAccess.Repositories.Base

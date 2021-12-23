@@ -1,4 +1,4 @@
-﻿using FinanceAccounting.Models;
+﻿using FinanceAccounting.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,12 +8,21 @@ namespace FinanceAccounting.DataAccess.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<BookkeepingUser> builder)
         {
-            builder.HasMany(u => u.Categories)
-                .WithMany(c => c.Users)
-                .UsingEntity(j => j.ToTable("UsersCategories"));
+            builder.ToTable("Users");
 
-            builder.HasMany(u => u.Transactions)
-                .WithOne(t => t.User);
+            builder.HasKey(user => user.Id);
+
+            builder.Property(user => user.Id).ValueGeneratedOnAdd();
+
+            builder.HasMany(u => u.Categories)
+                .WithOne()
+                .HasForeignKey(category => category.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(u => u.Operations)
+                .WithOne()
+                .HasForeignKey(operation => operation.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
