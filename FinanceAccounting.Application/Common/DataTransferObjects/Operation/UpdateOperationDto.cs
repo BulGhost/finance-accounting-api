@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinanceAccounting.Application.Common.DataTransferObjects
+namespace FinanceAccounting.Application.Common.DataTransferObjects.Operation
 {
     public class UpdateOperationDto
     {

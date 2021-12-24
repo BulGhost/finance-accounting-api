@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using FinanceAccounting.DataAccess.DbContext;
+using FinanceAccounting.DataAccess.Initialization;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FinanceAccounting.WebApi
 {
@@ -13,7 +11,23 @@ namespace FinanceAccounting.WebApi
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            IHost host = CreateHostBuilder(args).Build();
+
+            using (IServiceScope scope = host.Services.CreateScope())
+            {
+                IServiceProvider services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<BookkeepingDbContext>();
+                    DbInitializer.Initialize(context);
+                }
+                catch (Exception ex)
+                {
+                    //TODO: Add logger
+                }
+            }
+
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

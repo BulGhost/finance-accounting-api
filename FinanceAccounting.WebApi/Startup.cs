@@ -10,7 +10,11 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using FinanceAccounting.Application;
+using FinanceAccounting.Application.Common.Mappings;
+using FinanceAccounting.DataAccess;
 using FinanceAccounting.DataAccess.DbContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,21 +29,29 @@ namespace FinanceAccounting.WebApi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(config =>
+            {
+                config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
+                config.AddProfile(new AssemblyMappingProfile(Assembly.GetAssembly(typeof(AssemblyMappingProfile))));
+            });
+
+            services.AddApplication();
+
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<BookkeepingDbContext>(options =>
-                options.UseSqlServer(connection, optionsBuilder => optionsBuilder.EnableRetryOnFailure()));
+            services.AddDataAccess(connection);
+
+            services.AddCors(); //TODO: Delete?
 
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FinanceAccounting.WebApi", Version = "v1" });
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -50,15 +62,10 @@ namespace FinanceAccounting.WebApi
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseCors();
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

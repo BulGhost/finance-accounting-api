@@ -11,7 +11,7 @@ namespace FinanceAccounting.DataAccess.Tests.Base
         {
             IConfiguration configuration = TestHelpers.GetConfiguration();
             BookkeepingDbContext context = TestHelpers.GetContext(configuration);
-            DataInitializer.ClearAndReseedDatabase(context);
+            DbInitializer.ClearAndReseedDatabase(context);
             context.Dispose();
         }
 

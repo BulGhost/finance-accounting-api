@@ -1,28 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using FinanceAccounting.DataAccess.Exceptions;
 using FinanceAccounting.Domain;
 using FinanceAccounting.Domain.Entities;
 using FinanceAccounting.Domain.Repository;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace FinanceAccounting.WebApi.Controllers.Base
 {
     [ApiController]
-    public abstract class BaseCrudController<T, TController> : ControllerBase
-        where T : BaseEntity, new()
-        where TController : BaseCrudController<T, TController>
+    [Route("api/[controller]")]
+    public abstract class BaseCrudController : ControllerBase
     {
-        protected readonly IRepository<T> MainRepo;
-        protected readonly ILogger<TController> Logger;
+        private readonly IMediator _mediator;
 
-        protected BaseCrudController(IRepository<T> repo, ILogger<TController> logger)
+        protected IMediator Mediator =>
+            _mediator ?? HttpContext.RequestServices.GetService<IMediator>();
+
+        protected BaseCrudController(IMediator mediator)
         {
-            MainRepo = repo;
-            Logger = logger;
+            _mediator = mediator;
         }
+
+        internal int UserId =>
+            User?.Identity == null || !User.Identity.IsAuthenticated
+                ? 0
+                : int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
     }
 }

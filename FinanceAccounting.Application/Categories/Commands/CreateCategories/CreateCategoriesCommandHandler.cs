@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FinanceAccounting.Domain.Entities;
 using FinanceAccounting.Domain.Repository;
-using FinanceAccounting.Application.Common.DataTransferObjects;
+using FinanceAccounting.Application.Common.DataTransferObjects.Category;
 using MediatR;
 
 namespace FinanceAccounting.Application.Categories.Commands.CreateCategories
@@ -23,17 +23,17 @@ namespace FinanceAccounting.Application.Categories.Commands.CreateCategories
         public async Task<IEnumerable<CategoryDto>> Handle(CreateCategoriesCommand request, CancellationToken cancellationToken)
         {
             var addedCategories = new List<Category>();
-            foreach ((OperationType operationType, string categoryName) in request.Categories)
+            foreach (CreateCategoryDto category in request.Categories)
             {
-                if (await _repo.IsCategoryExistsAsync(request.UserId, operationType, categoryName, cancellationToken))
+                if (await _repo.IsCategoryExistsAsync(request.UserId, category.Type, category.Name, cancellationToken))
                 {
                     continue;
                 }
 
                 var newCategory = new Category
                 {
-                    Type = operationType,
-                    CategoryName = categoryName,
+                    Type = category.Type,
+                    CategoryName = category.Name,
                     UserId = request.UserId
                 };
                 await _repo.AddAsync(newCategory, true, cancellationToken);

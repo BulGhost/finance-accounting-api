@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FinanceAccounting.Application.Common.DataTransferObjects;
+using FinanceAccounting.Application.Common.DataTransferObjects.Category;
 using FinanceAccounting.Domain.Repository;
 using MediatR;
 

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FinanceAccounting.Application.Common.DataTransferObjects;
+using FinanceAccounting.Application.Common.DataTransferObjects.Operation;
 using FinanceAccounting.Domain.Entities;
 using FinanceAccounting.Domain.Repository;
 

@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FinanceAccounting.DataAccess.Initialization
 {
-    public static class DataInitializer
+    public static class DbInitializer
     {
-        public static void InitializeData(BookkeepingDbContext context)
+        public static void Initialize(BookkeepingDbContext context)
         {
             DropAndCreateDatabase(context);
             SeedData(context);

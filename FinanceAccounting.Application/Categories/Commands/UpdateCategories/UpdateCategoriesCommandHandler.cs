@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using FinanceAccounting.Application.Common.DataTransferObjects;
+using FinanceAccounting.Application.Common.DataTransferObjects.Category;
 using FinanceAccounting.Domain.Entities;
 using FinanceAccounting.Domain.Exceptions;
 using FinanceAccounting.Domain.Repository;
@@ -24,19 +24,19 @@ namespace FinanceAccounting.Application.Categories.Commands.UpdateCategories
         public async Task<IEnumerable<CategoryDto>> Handle(UpdateCategoriesCommand request, CancellationToken cancellationToken)
         {
             var updatedCategories = new List<Category>();
-            foreach ((int categoryId, string categoryName) in request.Categories)
+            foreach (UpdateCategoryDto category in request.Categories)
             {
-                Category category = await _repo.FindAsync(categoryId, cancellationToken);
+                Category categoryUpd = await _repo.FindAsync(category.Id, cancellationToken);
 
-                if (category == null || category.UserId != request.UserId)
+                if (categoryUpd == null || categoryUpd.UserId != request.UserId)
                 {
-                    throw new CategoryNotFoundException(categoryId, categoryName);
+                    throw new CategoryNotFoundException(category.Id, category.Name);
                 }
 
-                category.CategoryName = categoryName;
+                categoryUpd.CategoryName = category.Name;
 
-                await _repo.UpdateAsync(category, true, cancellationToken);
-                updatedCategories.Add(category);
+                await _repo.UpdateAsync(categoryUpd, true, cancellationToken);
+                updatedCategories.Add(categoryUpd);
             }
 
             return _mapper.Map<IEnumerable<CategoryDto>>(updatedCategories);
