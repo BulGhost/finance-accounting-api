@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FinanceAccounting.Application.Categories.Commands.CreateCategories;
 using FinanceAccounting.Application.Categories.Commands.DeleteCategories;
@@ -19,37 +20,39 @@ namespace FinanceAccounting.WebApi.Controllers
         }
 
         [HttpGet("{operationType}")]
-        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories(OperationType operationType)
+        public async Task<IActionResult> GetCategories(
+            OperationType operationType, CancellationToken cancellationToken = default)
         {
             var query = new GetCategoriesQuery(UserId, operationType);
-            var viewModel = await Mediator.Send(query);
+            var viewModel = await Mediator.Send(query, cancellationToken);
             return Ok(viewModel);
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<CategoryDto>>> CreateCategories(
-            [FromBody] CreateCategoryDto[] categories)
+        public async Task<IActionResult> CreateCategories(
+            [FromBody] CreateCategoryDto[] categories, CancellationToken cancellationToken = default)
         {
             var command = new CreateCategoriesCommand(UserId, categories);
-            var addedCategories = await Mediator.Send(command);
-            return Ok(addedCategories);
+            var addedCategories = await Mediator.Send(command, cancellationToken);
+            return StatusCode(201, addedCategories);
         }
 
         [HttpPut]
-        public async Task<ActionResult<IEnumerable<CategoryDto>>> UpdateCategories(
-            [FromBody] UpdateCategoryDto[] categories)
+        public async Task<IActionResult> UpdateCategories(
+            [FromBody] UpdateCategoryDto[] categories, CancellationToken cancellationToken = default)
         {
             var command = new UpdateCategoriesCommand(UserId, categories);
-            var updatedCategories = await Mediator.Send(command);
-            return Ok(updatedCategories);
+            var updatedCategories = await Mediator.Send(command, cancellationToken);
+            return StatusCode(202, updatedCategories);
         }
 
         [HttpDelete]
-        public async Task<ActionResult<IEnumerable<int>>> DeleteCategories([FromBody] int[] categoryIds)
+        public async Task<IActionResult> DeleteCategories(
+            [FromBody] int[] categoryIds, CancellationToken cancellationToken = default)
         {
             var command = new DeleteCategoriesCommand(UserId, categoryIds);
-            var deletedCategoryIds = await Mediator.Send(command);
-            return Ok(deletedCategoryIds);
+            var deletedCategoryIds = await Mediator.Send(command, cancellationToken);
+            return StatusCode(202, deletedCategoryIds);
         }
     }
 }

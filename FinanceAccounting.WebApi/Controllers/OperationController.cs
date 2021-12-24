@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FinanceAccounting.Application.Common.DataTransferObjects.Operation;
 using FinanceAccounting.Application.Operations.Commands.AddOperations;
@@ -22,46 +23,50 @@ namespace FinanceAccounting.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<OperationsReport>> GetDaysOperationsReport([FromQuery] DateTime date)
+        public async Task<IActionResult> GetDaysOperationsReport(
+            [FromQuery] DateTime date, CancellationToken cancellationToken = default)
         {
             var query = new GetDaysOperationsQuery(UserId, date);
-            var operations = await Mediator.Send(query);
+            var operations = await Mediator.Send(query, cancellationToken);
             OperationsReport report = new ReportBuilder().BuildOperationsReport(operations);
             return Ok(report);
         }
 
         [HttpGet]
-        public async Task<ActionResult<OperationsReport>> GetPeriodsOperationsReport(
-            [FromQuery] DateTime startDate, [FromQuery] DateTime finalDdate)
+        public async Task<IActionResult> GetPeriodsOperationsReport(
+            [FromQuery] DateTime startDate, [FromQuery] DateTime finalDdate, CancellationToken cancellationToken = default)
         {
             var query = new GetPeriodsOperationsQuery(UserId, startDate, finalDdate);
-            var operations = await Mediator.Send(query);
+            var operations = await Mediator.Send(query, cancellationToken);
             OperationsReport report = new ReportBuilder().BuildOperationsReport(operations);
             return Ok(report);
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<OperationDto>>> AddOperations([FromBody] CreateOperationDto[] operations)
+        public async Task<IActionResult> AddOperations(
+            [FromBody] CreateOperationDto[] operations, CancellationToken cancellationToken = default)
         {
             var command = new AddOperationsCommand(UserId, operations);
-            var addedOperations = await Mediator.Send(command);
-            return Ok(addedOperations);
+            var addedOperations = await Mediator.Send(command, cancellationToken);
+            return StatusCode(201, addedOperations);
         }
 
         [HttpPut]
-        public async Task<ActionResult<IEnumerable<OperationDto>>> UpdateOperations([FromBody] UpdateOperationDto[] operations)
+        public async Task<IActionResult> UpdateOperations(
+            [FromBody] UpdateOperationDto[] operations, CancellationToken cancellationToken = default)
         {
             var command = new UpdateOperationsCommand(UserId, operations);
-            var updatedOperations = await Mediator.Send(command);
-            return Ok(updatedOperations);
+            var updatedOperations = await Mediator.Send(command, cancellationToken);
+            return StatusCode(202, updatedOperations);
         }
 
         [HttpDelete]
-        public async Task<ActionResult<IEnumerable<int>>> DeleteOperations([FromBody] int[] operationIds)
+        public async Task<IActionResult> DeleteOperations(
+            [FromBody] int[] operationIds, CancellationToken cancellationToken = default)
         {
             var command = new DeleteOperationsCommand(UserId, operationIds);
-            var deletedOperationIds = await Mediator.Send(command);
-            return Ok(deletedOperationIds);
+            var deletedOperationIds = await Mediator.Send(command, cancellationToken);
+            return StatusCode(202, deletedOperationIds);
         }
     }
 }

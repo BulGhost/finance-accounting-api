@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using FinanceAccounting.Application.Common.DataTransferObjects;
 using FinanceAccounting.Application.Common.DataTransferObjects.Category;
 using FinanceAccounting.Domain.Entities;
 using MediatR;
