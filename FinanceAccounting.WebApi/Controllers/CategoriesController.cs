@@ -1,18 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using FinanceAccounting.Application.Categories.Commands.CreateCategories;
 using FinanceAccounting.Application.Categories.Commands.DeleteCategories;
 using FinanceAccounting.Application.Categories.Commands.UpdateCategories;
 using FinanceAccounting.Application.Categories.Queries.GetListOfCategories;
-using FinanceAccounting.Application.Common.DataTransferObjects.Category;
+using FinanceAccounting.Application.Common.DataTransferObjects.CategoryDto;
 using FinanceAccounting.Domain.Entities;
 using FinanceAccounting.WebApi.Controllers.Base;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FinanceAccounting.WebApi.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CategoriesController : BaseCrudController
     {
         public CategoriesController(IMediator mediator) : base(mediator)

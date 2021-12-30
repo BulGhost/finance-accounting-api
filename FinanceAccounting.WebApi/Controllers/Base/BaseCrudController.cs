@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using FinanceAccounting.DataAccess.Exceptions;
 using FinanceAccounting.Domain;
@@ -31,6 +32,6 @@ namespace FinanceAccounting.WebApi.Controllers.Base
         internal int UserId =>
             User?.Identity == null || !User.Identity.IsAuthenticated
                 ? 0
-                : int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                : int.Parse(User.FindFirst(JwtRegisteredClaimNames.NameId).Value); //TODO: Modify
     }
 }

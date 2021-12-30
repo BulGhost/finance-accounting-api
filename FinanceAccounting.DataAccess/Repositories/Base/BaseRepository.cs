@@ -4,13 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using FinanceAccounting.DataAccess.DbContext;
 using FinanceAccounting.DataAccess.Exceptions;
-using FinanceAccounting.Domain.Entities;
+using FinanceAccounting.Domain.Entities.Base;
 using FinanceAccounting.Domain.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinanceAccounting.DataAccess.Repositories.Base
 {
-    public abstract class BaseRepository<T> : IRepository<T> where T : BaseEntity, new()
+    public abstract class BaseRepository<T> : IRepository<T> where T : class, IEntity<int>, new()
     {
         private readonly bool _disposeContext;
         private bool _isDisposed;

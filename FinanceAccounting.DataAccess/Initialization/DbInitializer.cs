@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using FinanceAccounting.DataAccess.DbContext;
 using FinanceAccounting.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -11,22 +11,22 @@ namespace FinanceAccounting.DataAccess.Initialization
 {
     public static class DbInitializer
     {
-        public static void Initialize(BookkeepingDbContext context)
+        public static async Task Initialize(BookkeepingDbContext context)
         {
-            DropAndCreateDatabase(context);
-            SeedData(context);
+            await DropAndCreateDatabase(context);
+            await SeedData(context);
         }
 
         public static void ClearAndReseedDatabase(BookkeepingDbContext context)
         {
             ClearData(context);
-            SeedData(context);
+            SeedData(context).RunSynchronously();
         }
 
-        internal static void DropAndCreateDatabase(BookkeepingDbContext context)
+        internal static async Task DropAndCreateDatabase(BookkeepingDbContext context)
         {
-            context.Database.EnsureDeleted();
-            context.Database.Migrate();
+            await context.Database.EnsureDeletedAsync();
+            await context.Database.MigrateAsync();
         }
 
         internal static void ClearData(BookkeepingDbContext context)
@@ -35,7 +35,7 @@ namespace FinanceAccounting.DataAccess.Initialization
             {
                 typeof(Operation).FullName,
                 typeof(Category).FullName,
-                typeof(BookkeepingUser).FullName
+                typeof(User).FullName
             };
 
             foreach (string entityName in entities)
@@ -49,13 +49,13 @@ namespace FinanceAccounting.DataAccess.Initialization
             }
         }
 
-        internal static void SeedData(BookkeepingDbContext context)
+        internal static async Task SeedData(BookkeepingDbContext context)
         {
             try
             {
-                ProcessInsert(context, context.Users, TestData.Users);
-                ProcessInsert(context, context.Categories, TestData.Categories);
-                ProcessInsert(context, context.Operations, TestData.Operations);
+                await ProcessInsert(context, context.Users, TestData.Users);
+                await ProcessInsert(context, context.Categories, TestData.Categories);
+                await ProcessInsert(context, context.Operations, TestData.Operations);
             }
             catch (Exception ex)
             {
@@ -63,29 +63,29 @@ namespace FinanceAccounting.DataAccess.Initialization
             }
         }
 
-        private static void ProcessInsert<TEntity>(BookkeepingDbContext context, DbSet<TEntity> table,
-            List<TEntity> records) where TEntity : BaseEntity //TODO: Is transaction needed??
+        private static async Task ProcessInsert<TEntity>(BookkeepingDbContext context, DbSet<TEntity> table,
+            List<TEntity> records) where TEntity : class //TODO: Is transaction needed??
         {
-            if (table.Any()) return;
+            if (await table.AnyAsync()) return;
 
             IExecutionStrategy strategy = context.Database.CreateExecutionStrategy();
-            strategy.Execute(() =>
+            await strategy.ExecuteAsync(async () =>
             {
-                using IDbContextTransaction transaction = context.Database.BeginTransaction();
+                await using IDbContextTransaction transaction = await context.Database.BeginTransactionAsync();
                 try
                 {
                     IEntityType metaData = context.Model.FindEntityType(typeof(TEntity).FullName!);
                     string schemaName = metaData.GetSchema() ?? "dbo";
                     string tableName = metaData.GetTableName();
-                    context.Database.ExecuteSqlRaw($"SET IDENTITY_INSERT {schemaName}.{tableName} ON");
-                    table.AddRange(records);
-                    context.SaveChanges();
-                    context.Database.ExecuteSqlRaw($"SET IDENTITY_INSERT {schemaName}.{tableName} OFF");
-                    transaction.Commit();
+                    await context.Database.ExecuteSqlRawAsync($"SET IDENTITY_INSERT {schemaName}.{tableName} ON");
+                    await table.AddRangeAsync(records);
+                    await context.SaveChangesAsync();
+                    await context.Database.ExecuteSqlRawAsync($"SET IDENTITY_INSERT {schemaName}.{tableName} OFF");
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                 }
             });
         }

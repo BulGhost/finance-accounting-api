@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 
 namespace FinanceAccounting.Application.Operations.Queries.GetDaysOperationsReport
 {
@@ -7,7 +8,7 @@ namespace FinanceAccounting.Application.Operations.Queries.GetDaysOperationsRepo
         public GetDaysOperationsQueryValidator()
         {
             RuleFor(query => query.UserId).GreaterThan(0);
-            RuleFor(query => query.Date).NotEmpty();
+            RuleFor(query => query.Date).NotEmpty().LessThan(DateTime.Today.AddDays(1));
         }
     }
 }

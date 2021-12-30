@@ -1,4 +1,6 @@
-﻿namespace FinanceAccounting.Domain.Entities
+﻿using FinanceAccounting.Domain.Entities.Base;
+
+namespace FinanceAccounting.Domain.Entities
 {
     public class Category : BaseEntity
     {

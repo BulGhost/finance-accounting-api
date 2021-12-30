@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using FinanceAccounting.Application.Common.DataTransferObjects.Category;
+using FinanceAccounting.Application.Common.DataTransferObjects.CategoryDto;
 using MediatR;
 
 namespace FinanceAccounting.Application.Categories.Commands.CreateCategories

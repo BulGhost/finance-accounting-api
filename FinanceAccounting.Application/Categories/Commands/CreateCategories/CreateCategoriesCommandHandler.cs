@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FinanceAccounting.Domain.Entities;
 using FinanceAccounting.Domain.Repository;
-using FinanceAccounting.Application.Common.DataTransferObjects.Category;
+using FinanceAccounting.Application.Common.DataTransferObjects.CategoryDto;
 using MediatR;
 
 namespace FinanceAccounting.Application.Categories.Commands.CreateCategories
@@ -40,7 +40,7 @@ namespace FinanceAccounting.Application.Categories.Commands.CreateCategories
                 addedCategories.Add(newCategory);
             }
 
-            return _mapper.Map<IEnumerable<CategoryDto>>(addedCategories);
+            return _mapper.Map<List<Category>, IEnumerable<CategoryDto>>(addedCategories);
         }
     }
 }

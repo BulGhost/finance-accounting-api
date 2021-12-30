@@ -16,11 +16,11 @@ namespace FinanceAccounting.DataAccess.Tests.IntegrationTests
     [Collection("Integration Tests")]
     public class UserTests : BaseTest, IClassFixture<EnsureFinanceAccountingDatabaseTestFixture>
     {
-        private readonly IBookkeepingUserRepo _repo;
+        private readonly IUserRepo _repo;
 
         public UserTests()
         {
-            _repo = new BookkeepingUserRepo(Context);
+            _repo = new UserRepo(Context);
         }
 
         public override void Dispose()

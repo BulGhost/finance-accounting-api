@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using FinanceAccounting.Application.Common.DataTransferObjects.Category;
+using FinanceAccounting.Application.Common.DataTransferObjects.CategoryDto;
 using FinanceAccounting.Domain.Entities;
 using FinanceAccounting.Domain.Exceptions;
 using FinanceAccounting.Domain.Repository;

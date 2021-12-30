@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using FinanceAccounting.Application.Common.DataTransferObjects.Operation;
+using FinanceAccounting.Application.Common.DataTransferObjects.OperationDto;
 using FinanceAccounting.Domain.Entities;
 
 namespace FinanceAccounting.WebApi.ViewModels.HelperClasses

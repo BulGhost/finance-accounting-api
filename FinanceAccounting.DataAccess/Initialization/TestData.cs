@@ -6,10 +6,10 @@ namespace FinanceAccounting.DataAccess.Initialization
 {
     public static class TestData
     {
-        public static List<BookkeepingUser> Users => new()
+        public static List<User> Users => new()
         {
-            new BookkeepingUser { Id = 1 },
-            new BookkeepingUser { Id = 2 }
+            new User { Id = 1, UserName = "FirstUser" },
+            new User { Id = 2, UserName = "SecondUser" }
         };
 
         public static List<Category> Categories => new()

@@ -1,4 +1,5 @@
-﻿using FinanceAccounting.DataAccess.DbContext;
+﻿using FinanceAccounting.Application.Abstractions.Repo;
+using FinanceAccounting.DataAccess.DbContext;
 using FinanceAccounting.DataAccess.Repositories;
 using FinanceAccounting.Domain.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,10 @@ namespace FinanceAccounting.DataAccess
                 options.UseSqlServer(connectionString,
                     optionsBuilder => optionsBuilder.EnableRetryOnFailure()));
 
-            services.AddScoped<IBookkeepingUserRepo, BookkeepingUserRepo>();
+            services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped<ICategoryRepo, CategoryRepo>();
             services.AddScoped<IOperationRepo, OperationRepo>();
+            services.AddScoped<IRefreshTokenRepo, RefreshTokenRepo>();
 
             return services;
         }

@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FinanceAccounting.DataAccess\FinanceAccounting.DataAccess.csproj" />
     <ProjectReference Include="..\FinanceAccounting.Application\FinanceAccounting.Application.csproj" />
+    <ProjectReference Include="..\FinanceAccounting.Security\FinanceAccounting.Security.csproj" />
   </ItemGroup>
 
 </Project>

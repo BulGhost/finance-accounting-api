@@ -1,4 +1,4 @@
-﻿using FinanceAccounting.Application.Common.DataTransferObjects.Category;
+﻿using FinanceAccounting.Application.Common.DataTransferObjects.CategoryDto;
 using FluentValidation;
 
 namespace FinanceAccounting.Application.Common.Validators.Category

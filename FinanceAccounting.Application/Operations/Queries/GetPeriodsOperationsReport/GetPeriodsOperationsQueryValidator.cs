@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 
 namespace FinanceAccounting.Application.Operations.Queries.GetPeriodsOperationsReport
 {
@@ -7,8 +8,8 @@ namespace FinanceAccounting.Application.Operations.Queries.GetPeriodsOperationsR
         public GetPeriodsOperationsQueryValidator()
         {
             RuleFor(query => query.UserId).GreaterThan(0);
-            RuleFor(query => query.StartDate).NotEmpty();
-            RuleFor(query => query.FinalDate).NotEmpty();
+            RuleFor(query => query.StartDate).NotEmpty().LessThan(query => query.FinalDate);
+            RuleFor(query => query.FinalDate).NotEmpty().LessThan(DateTime.Today.AddDays(1));
         }
     }
 }

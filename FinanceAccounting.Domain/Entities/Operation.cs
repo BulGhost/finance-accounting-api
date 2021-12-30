@@ -1,4 +1,5 @@
 ﻿using System;
+using FinanceAccounting.Domain.Entities.Base;
 
 namespace FinanceAccounting.Domain.Entities
 {
