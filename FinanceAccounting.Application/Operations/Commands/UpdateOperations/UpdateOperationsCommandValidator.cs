@@ -1,14 +1,47 @@
-﻿using FinanceAccounting.Application.Common.Validators.Operation;
+﻿using System.Linq;
+using FinanceAccounting.Application.Common.DataTransferObjects.OperationDto;
+using FinanceAccounting.Application.Common.Validators.Operation;
+using FinanceAccounting.Domain.Entities;
+using FinanceAccounting.Domain.Repository;
 using FluentValidation;
 
 namespace FinanceAccounting.Application.Operations.Commands.UpdateOperations
 {
     public class UpdateOperationsCommandValidator : AbstractValidator<UpdateOperationsCommand>
     {
-        public UpdateOperationsCommandValidator()
+        public UpdateOperationsCommandValidator(IUserRepo userRepo)
         {
-            RuleFor(command => command.UserId).GreaterThan(0);
+            User user = null;
+            RuleFor(command => command.UserId).MustAsync(async (id, cancellationToken) =>
+                {
+                    user = await userRepo.FindAsync(id, cancellationToken);
+                    return user != null;
+                }).WithMessage(Resourses.OperationsValidators.UserDoesNotExist)
+                .DependentRules(() =>
+                {
+                    RuleFor(command => command).Must(command =>
+                    {
+                        var userOperationIds = user.Operations.Select(c => c.Id).ToList();
+                        return command.Operations.All(operation => userOperationIds.Contains(operation.Id));
+                    }).WithMessage(Resourses.OperationsValidators.NoSuchOperation);
+
+                    RuleFor(command => command).Must(command =>
+                    {
+                        var userCategoryIds = user.Categories.Select(c => c.Id).ToList();
+                        return command.Operations.All(operation => userCategoryIds.Contains(operation.CategoryId));
+                    }).WithMessage(Resourses.OperationsValidators.NoSuchCategory);
+                });
+
             RuleForEach(command => command.Operations).SetValidator(new UpdateOperationDtoValidator());
+
+            RuleFor(command => command).Must(command => HasNoDuplicateOperationIds(command.Operations))
+                .WithMessage(Resourses.OperationsValidators.DuplicateIds);
+        }
+
+        private bool HasNoDuplicateOperationIds(UpdateOperationDto[] operations)
+        {
+            return operations.GroupBy(o => o.Id)
+                .All(g => g.Count() == 1);
         }
     }
 }

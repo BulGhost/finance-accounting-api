@@ -1,5 +1,4 @@
-﻿using FinanceAccounting.Application.Common.Validators;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace FinanceAccounting.Application.Users.Commands.RegisterUser
 {
@@ -8,10 +7,12 @@ namespace FinanceAccounting.Application.Users.Commands.RegisterUser
         public RegisterUserCommandValidator()
         {
             RuleFor(command => command.UserName).Matches("^[a-zA-Z][a-zA-Z0-9]{3,20}$")
-                .WithMessage("Username must begin with a letter, can contain letters and numbers and must be 3 to 20 characters long");
+                .WithMessage(Resourses.UserValidators.InvalidUsername);
             RuleFor(command => command.Email).NotEmpty().EmailAddress();
-            RuleFor(command => command.Password).Password();
-            RuleFor(command => command.ConfirmPassword).Equal(command => command.Password);
+            RuleFor(command => command.Password).NotEmpty().Length(6, 30)
+                .WithMessage(Resourses.UserValidators.InvalidPassword);
+            RuleFor(command => command.ConfirmPassword).Equal(command => command.Password)
+                .WithMessage(Resourses.UserValidators.PasswordMismatch);
         }
     }
 }

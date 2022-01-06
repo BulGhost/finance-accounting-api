@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using FinanceAccounting.DataAccess.Exceptions;
-using FinanceAccounting.Domain;
-using FinanceAccounting.Domain.Entities;
-using FinanceAccounting.Domain.Repository;
+﻿using System.IdentityModel.Tokens.Jwt;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace FinanceAccounting.WebApi.Controllers.Base
 {
@@ -30,8 +20,8 @@ namespace FinanceAccounting.WebApi.Controllers.Base
         }
 
         internal int UserId =>
-            User?.Identity == null || !User.Identity.IsAuthenticated
+            User?.Identity == null || !User.Identity.IsAuthenticated || User.FindFirst(JwtRegisteredClaimNames.NameId) == null
                 ? 0
-                : int.Parse(User.FindFirst(JwtRegisteredClaimNames.NameId).Value); //TODO: Modify
+                : int.Parse(User.FindFirst(JwtRegisteredClaimNames.NameId)!.Value);
     }
 }

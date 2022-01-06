@@ -13,14 +13,12 @@ namespace FinanceAccounting.Application.Users.Queries.AuthenticateUser
     public class AuthenticateUserQueryHandler : IRequestHandler<AuthenticateUserQuery, UserAuthenticationResponse>
     {
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        private readonly IJwtGenerator _jwtGenerator;
+        private readonly ITokenGenerator _tokenGenerator;
 
-        public AuthenticateUserQueryHandler(UserManager<User> userManager, SignInManager<User> signInManager, IJwtGenerator jwtGenerator)
+        public AuthenticateUserQueryHandler(UserManager<User> userManager, ITokenGenerator tokenGenerator)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
-            _jwtGenerator = jwtGenerator;
+            _tokenGenerator = tokenGenerator;
         }
 
         public async Task<UserAuthenticationResponse> Handle(AuthenticateUserQuery request, CancellationToken cancellationToken)
@@ -31,11 +29,11 @@ namespace FinanceAccounting.Application.Users.Queries.AuthenticateUser
                 throw new UserNotFoundException(request.UserName);
             }
 
-            SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+            bool isCorrectPassword = await _userManager.CheckPasswordAsync(user, request.Password);
 
-            if (!result.Succeeded) throw new UserAuthenticationException();
+            if (!isCorrectPassword) throw new UserAuthenticationException();
 
-            return await _jwtGenerator.CreateTokensAsync(user);
+            return await _tokenGenerator.CreateTokensAsync(user, cancellationToken);
         }
     }
 }

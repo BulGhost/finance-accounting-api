@@ -29,13 +29,8 @@ namespace FinanceAccounting.Application.Operations.Commands.UpdateOperations
             {
                 Operation operation = await _repo.FindAsync(operationDto.Id, cancellationToken);
 
-                if (operation == null || operation.UserId != request.UserId)
-                {
-                    throw new OperationNotFoundException(operationDto.Id);
-                }
-
                 operation.Date = operationDto.Date;
-                operation.Type = await _repo.GetOperationTypeByCategoryId(operationDto.CategoryId);
+                operation.Type = await _repo.GetOperationTypeByCategoryIdAsync(operationDto.CategoryId);
                 operation.CategoryId = operationDto.CategoryId;
                 operation.Sum = operationDto.Sum;
                 operation.Details = operationDto.Details;

@@ -16,7 +16,7 @@ namespace FinanceAccounting.DataAccess.EntityTypeConfigurations
 
             builder.Property(t => t.Date).IsRequired().HasColumnType("date");
 
-            builder.Property(operation => operation.Sum).IsRequired();
+            builder.Property(operation => operation.Sum).IsRequired().HasColumnType("money");
 
             builder.Property(operation => operation.Details).HasMaxLength(150);
 

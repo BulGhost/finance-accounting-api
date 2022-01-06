@@ -20,21 +20,22 @@ namespace FinanceAccounting.DataAccess.Repositories
         {
         }
 
-        public async Task<OperationType> GetOperationTypeByCategoryId(int categoryId)
+        public async Task<OperationType> GetOperationTypeByCategoryIdAsync(int categoryId)
         {
             Category category = await Context.Categories.FindAsync(categoryId);
             return category.Type;
         }
 
-        public async Task<IEnumerable<Operation>> GetUserOperationsOnDate(int userId, DateTime date)
+        public async Task<IEnumerable<Operation>> GetUserOperationsOnDateAsync(int userId, DateTime date)
         {
-            return await Table.Where(operation => operation.Date == date).ToListAsync();
+            return await Table.Where(operation => operation.UserId == userId && operation.Date == date).ToListAsync();
         }
 
-        public async Task<IEnumerable<Operation>> GetUserOperationsOnDateRange(int userId, DateTime startDate, DateTime finalDate)
+        public async Task<IEnumerable<Operation>> GetUserOperationsOnDateRangeAsync(int userId, DateTime startDate, DateTime finalDate)
         {
-            return await Table.Where(operation => operation.Date >= startDate && operation.Date <= finalDate)
-                .ToListAsync();
+            return await Table.Where(operation => operation.UserId == userId &&
+                                                  operation.Date >= startDate &&
+                                                  operation.Date <= finalDate).ToListAsync();
         }
     }
 }

@@ -1,23 +1,30 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using FinanceAccounting.Domain.Entities;
+using FinanceAccounting.Application.Abstractions.Repo;
+using FinanceAccounting.Application.Common.Models;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 
 namespace FinanceAccounting.Application.Users.Queries.LogoutUser
 {
     public class LogoutUserQueryHandler : IRequestHandler<LogoutUserQuery>
     {
-        private readonly SignInManager<User> _signInManager;
+        private readonly IRefreshTokenRepo _refreshTokenRepo;
 
-        public LogoutUserQueryHandler(SignInManager<User> signInManager)
+        public LogoutUserQueryHandler(IRefreshTokenRepo refreshTokenRepo)
         {
-            _signInManager = signInManager;
+            _refreshTokenRepo = refreshTokenRepo;
         }
 
         public async Task<Unit> Handle(LogoutUserQuery request, CancellationToken cancellationToken)
         {
-            await _signInManager.SignOutAsync(); //TODO: Delete tokens
+            var activeTokens = await _refreshTokenRepo.FindAllActiveTokensByUserIdAsync(request.UserId, cancellationToken);
+            foreach (RefreshToken token in activeTokens)
+            {
+                token.IsRevoked = true;
+            }
+
+            await _refreshTokenRepo.SaveChangesAsync(cancellationToken);
+
             return Unit.Value;
         }
     }

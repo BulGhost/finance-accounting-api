@@ -1,12 +1,18 @@
-﻿using FluentValidation;
+﻿using FinanceAccounting.Domain.Entities;
+using FinanceAccounting.Domain.Repository;
+using FluentValidation;
 
 namespace FinanceAccounting.Application.Users.Queries.LogoutUser
 {
     public class LogoutUserQueryValidator : AbstractValidator<LogoutUserQuery>
     {
-        public LogoutUserQueryValidator()
+        public LogoutUserQueryValidator(IUserRepo userRepo)
         {
-            RuleFor(query => query.UserId).GreaterThan(0);
+            RuleFor(command => command.UserId).MustAsync(async (id, cancellationToken) =>
+            {
+                User user = await userRepo.FindAsync(id, cancellationToken);
+                return user != null;
+            }).WithMessage(Resourses.UserValidators.UserNotExist);
         }
     }
 }

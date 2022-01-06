@@ -3,5 +3,5 @@ using MediatR;
 
 namespace FinanceAccounting.Application.Users.Commands.RefreshToken
 {
-    public record RefreshTokenCommand(string Token, string RefreshToken) : IRequest<UserAuthenticationResponse>;
+    public record RefreshTokenCommand(string AccessToken, string RefreshToken) : IRequest<UserAuthenticationResponse>;
 }

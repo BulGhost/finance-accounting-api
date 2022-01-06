@@ -40,7 +40,7 @@ namespace FinanceAccounting.Application.Categories.Commands.CreateCategories
                 addedCategories.Add(newCategory);
             }
 
-            return _mapper.Map<List<Category>, IEnumerable<CategoryDto>>(addedCategories);
+            return _mapper.Map<IEnumerable<CategoryDto>>(addedCategories);
         }
     }
 }

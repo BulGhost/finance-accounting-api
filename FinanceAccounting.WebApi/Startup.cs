@@ -7,8 +7,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using FinanceAccounting.Application;
+using FinanceAccounting.Application.Abstractions.Repo;
 using FinanceAccounting.Application.Abstractions.Security;
 using FinanceAccounting.Application.Common.Mappings;
+using FinanceAccounting.Application.Common.Models;
 using FinanceAccounting.DataAccess;
 using FinanceAccounting.DataAccess.DbContext;
 using FinanceAccounting.Domain.Entities;
@@ -67,7 +69,9 @@ namespace FinanceAccounting.WebApi
                 });
             });
 
-            services.AddIdentity<User, IdentityRole<int>>(options =>
+            services.AddIdentityCore<User>(options =>
+                {
+                    options.User.RequireUniqueEmail = true;
                     options.Password = new PasswordOptions
                     {
                         RequiredLength = 6,
@@ -75,18 +79,17 @@ namespace FinanceAccounting.WebApi
                         RequireUppercase = true,
                         RequireDigit = true,
                         RequireNonAlphanumeric = false
-                    })
+                    };
+                })
                 .AddEntityFrameworkStores<BookkeepingDbContext>()
-                .AddSignInManager<SignInManager<User>>()
-                .AddUserManager<UserManager<User>>()
-                .AddDefaultTokenProviders();
+                .AddUserManager<UserManager<User>>();
 
-            var jwtConfig = new JwtConfig();
+            var jwtConfig = new AuthenticationConfig();
             Configuration.GetSection("Jwt").Bind(jwtConfig);
-            var signingSymmetricKey = new SigningSymmetricKey(jwtConfig);
-            services.AddSingleton<IJwtSigningEncodingKey>(signingSymmetricKey);
-            services.AddScoped<IJwtGenerator, JwtGenerator>();
-            services.AddScoped<IJwtVerifier, JwtVerifier>();
+            Func<string, SecurityKey> getSigningKeyFunc = SigningSymmetricKey.GetKey;
+            services.AddScoped<ITokenGenerator>(provider => new TokenGenerator(
+                jwtConfig, getSigningKeyFunc, provider.GetService<IRefreshTokenRepo>()));
+            services.AddScoped<ITokenValidator, TokenValidator>();
 
             var tokenValidationParameters = new TokenValidationParameters
             {
@@ -94,7 +97,7 @@ namespace FinanceAccounting.WebApi
                 ValidIssuer = jwtConfig.Issuer,
                 ValidAlgorithms = new[] {jwtConfig.SigningAlgorithm},
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = signingSymmetricKey.GetKey(),
+                IssuerSigningKey = getSigningKeyFunc(jwtConfig.AccessTokenSecret),
                 ValidateAudience = false,
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero

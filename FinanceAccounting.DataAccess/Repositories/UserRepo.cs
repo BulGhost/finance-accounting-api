@@ -40,15 +40,5 @@ namespace FinanceAccounting.DataAccess.Repositories
                 .Include(user => user.Categories)
                 .Include(user => user.Operations)
                 .ToListAsync(cancellationToken);
-
-        public Task<bool> IsUserWithTheSameEmailAlreadyExists(string email)
-        {
-            return Table.Where(u => u.Email == email).AnyAsync();
-        }
-
-        public Task<bool> IsUserWithTheSameUserNameAlreadyExists(string userName)
-        {
-            return Table.Where(u => u.UserName == userName).AnyAsync();
-        }
     }
 }

@@ -28,7 +28,7 @@ namespace FinanceAccounting.Application.Operations.Commands.AddOperations
                 var newOperation = new Operation
                 {
                     UserId = request.UserId,
-                    Type = await _repo.GetOperationTypeByCategoryId(operation.CategoryId),
+                    Type = await _repo.GetOperationTypeByCategoryIdAsync(operation.CategoryId),
                     Date = operation.Date,
                     CategoryId = operation.CategoryId,
                     Sum = operation.Sum,

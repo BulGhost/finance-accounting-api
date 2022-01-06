@@ -59,12 +59,12 @@ namespace FinanceAccounting.DataAccess.Initialization
             }
             catch (Exception ex)
             {
-                //TODO: Log and handle ex
+                //TODO: Log and handle
             }
         }
 
         private static async Task ProcessInsert<TEntity>(BookkeepingDbContext context, DbSet<TEntity> table,
-            List<TEntity> records) where TEntity : class //TODO: Is transaction needed??
+            List<TEntity> records) where TEntity : class
         {
             if (await table.AnyAsync()) return;
 

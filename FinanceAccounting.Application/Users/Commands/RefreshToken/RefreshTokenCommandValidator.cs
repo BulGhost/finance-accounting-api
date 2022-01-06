@@ -6,7 +6,7 @@ namespace FinanceAccounting.Application.Users.Commands.RefreshToken
     {
         public RefreshTokenCommandValidator()
         {
-            RuleFor(command => command.Token).NotEmpty();
+            RuleFor(command => command.AccessToken).NotEmpty();
             RuleFor(command => command.RefreshToken).NotEmpty();
         }
     }

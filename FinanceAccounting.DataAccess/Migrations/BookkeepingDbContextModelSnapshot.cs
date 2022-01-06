@@ -32,10 +32,10 @@ namespace FinanceAccounting.DataAccess.Migrations
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsRevoked")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsRevoked")
+                    b.Property<bool>("IsUsed")
                         .HasColumnType("bit");
 
                     b.Property<string>("JwtId")
@@ -99,7 +99,7 @@ namespace FinanceAccounting.DataAccess.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<decimal>("Sum")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("money");
 
                     b.Property<int>("Type")
                         .ValueGeneratedOnAddOrUpdate()

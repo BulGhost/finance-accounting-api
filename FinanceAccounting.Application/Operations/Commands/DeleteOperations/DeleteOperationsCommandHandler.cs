@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using FinanceAccounting.Domain.Entities;
 using FinanceAccounting.Domain.Repository;
 using MediatR;
@@ -11,12 +10,10 @@ namespace FinanceAccounting.Application.Operations.Commands.DeleteOperations
     public class DeleteOperationsCommandHandler : IRequestHandler<DeleteOperationsCommand, IEnumerable<int>>
     {
         private readonly IOperationRepo _repo;
-        private readonly IMapper _mapper;
 
-        public DeleteOperationsCommandHandler(IOperationRepo repo, IMapper mapper)
+        public DeleteOperationsCommandHandler(IOperationRepo repo)
         {
             _repo = repo;
-            _mapper = mapper;
         }
 
         public async Task<IEnumerable<int>> Handle(DeleteOperationsCommand request, CancellationToken cancellationToken)

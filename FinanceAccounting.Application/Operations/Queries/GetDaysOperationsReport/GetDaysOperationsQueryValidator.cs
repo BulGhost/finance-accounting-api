@@ -1,14 +1,22 @@
 ﻿using System;
+using FinanceAccounting.Domain.Entities;
+using FinanceAccounting.Domain.Repository;
 using FluentValidation;
 
 namespace FinanceAccounting.Application.Operations.Queries.GetDaysOperationsReport
 {
     public class GetDaysOperationsQueryValidator : AbstractValidator<GetDaysOperationsQuery>
     {
-        public GetDaysOperationsQueryValidator()
+        public GetDaysOperationsQueryValidator(IUserRepo userRepo)
         {
-            RuleFor(query => query.UserId).GreaterThan(0);
-            RuleFor(query => query.Date).NotEmpty().LessThan(DateTime.Today.AddDays(1));
+            RuleFor(query => query.UserId).MustAsync(async (id, cancellationToken) =>
+            {
+                User user = await userRepo.FindAsync(id, cancellationToken);
+                return user != null;
+            }).WithMessage(Resourses.OperationsValidators.UserDoesNotExist);
+
+            RuleFor(query => query.Date).NotEmpty().LessThan(DateTime.Today.AddDays(1))
+                .WithMessage(Resourses.OperationsValidators.DateInFuture);
         }
     }
 }

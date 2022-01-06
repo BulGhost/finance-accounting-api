@@ -7,6 +7,7 @@ using FinanceAccounting.Application.Users.Queries.AuthenticateUser;
 using FinanceAccounting.Application.Users.Queries.LogoutUser;
 using FinanceAccounting.WebApi.Controllers.Base;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 
@@ -23,15 +24,6 @@ namespace FinanceAccounting.WebApi.Controllers
             _tokenValidationParameters = tokenValidationParameters;
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Login([FromBody] AuthenticateUserQuery query)
-        {
-            UserAuthenticationResponse response = await Mediator.Send(query);
-            return Ok(response);
-        }
-
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
         {
@@ -40,19 +32,26 @@ namespace FinanceAccounting.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Login([FromBody] AuthenticateUserQuery query)
         {
-            var query = new LogoutUserQuery(UserId);
-            await Mediator.Send(query);
-            return Ok();
+            UserAuthenticationResponse response = await Mediator.Send(query);
+            return Ok(response);
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand command)
         {
             UserAuthenticationResponse response = await Mediator.Send(command);
             return Ok(response);
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpDelete]
+        public async Task<IActionResult> Logout()
+        {
+            var query = new LogoutUserQuery(UserId);
+            await Mediator.Send(query);
+            return NoContent();
         }
     }
 }

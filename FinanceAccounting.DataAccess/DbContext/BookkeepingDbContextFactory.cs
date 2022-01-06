@@ -8,7 +8,7 @@ namespace FinanceAccounting.DataAccess.DbContext
         public BookkeepingDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<BookkeepingDbContext>();
-            const string connectionString = @"Server=.;Database=FinanceAccounting;Trusted_Connection=True;MultipleActiveResultSets=True";
+            const string connectionString = @"Server=.;Database=FinanceAccounting;Trusted_Connection=True";
             optionsBuilder.UseSqlServer(connectionString, options => options.EnableRetryOnFailure());
             return new BookkeepingDbContext(optionsBuilder.Options);
         }

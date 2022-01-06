@@ -1,21 +1,13 @@
 ﻿using System.Text;
-using FinanceAccounting.Application.Abstractions.Security;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FinanceAccounting.Security
 {
-    public class SigningSymmetricKey : IJwtSigningEncodingKey, IJwtSigningDecodingKey
+    public class SigningSymmetricKey
     {
-        private readonly SymmetricSecurityKey _secretKey;
-
-        public IJwtConfig JwtConfig { get; }
-
-        public SigningSymmetricKey(IJwtConfig jwtConfig)
+        public static SecurityKey GetKey(string secret)
         {
-            _secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secret));
-            JwtConfig = jwtConfig;
+            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         }
-
-        public SecurityKey GetKey() => _secretKey;
     }
 }
