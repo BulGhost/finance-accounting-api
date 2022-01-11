@@ -79,7 +79,7 @@ namespace FinanceAccounting.Security.IntegrationTests
             throw new NotImplementedException();
         }
 
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public Task<int> SaveAsync(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

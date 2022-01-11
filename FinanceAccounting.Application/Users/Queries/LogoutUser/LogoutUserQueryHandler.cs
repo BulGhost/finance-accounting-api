@@ -23,7 +23,7 @@ namespace FinanceAccounting.Application.Users.Queries.LogoutUser
                 token.IsRevoked = true;
             }
 
-            await _refreshTokenRepo.SaveChangesAsync(cancellationToken);
+            await _refreshTokenRepo.SaveAsync(cancellationToken);
 
             return Unit.Value;
         }

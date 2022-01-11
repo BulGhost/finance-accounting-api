@@ -1,8 +1,11 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using FinanceAccounting.Application.Common.DataTransferObjects.UserDto;
+using FinanceAccounting.Application.Tests.Stubs;
 using FinanceAccounting.Application.Users.Commands.RegisterUser;
 using FinanceAccounting.Domain.Entities;
 using FinanceAccounting.Domain.Exceptions;
+using FinanceAccounting.Domain.Repository;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Moq;
@@ -15,7 +18,9 @@ namespace FinanceAccounting.Application.Tests.Users.Commands.RegisterUser
         private readonly Mock<UserManager<User>> _userManagerMock = new(
             new Mock<IUserStore<User>>().Object, null, null, null, null, null, null, null, null);
 
-        private readonly RegisterUserCommand _command =
+        private readonly ICategoryRepo _categoryRepo = new CategoryRepoStub();
+
+        private RegisterUserCommand _command =
             new("UserName", "user@mail.com", "password", "password");
 
         [Fact]
@@ -24,7 +29,7 @@ namespace FinanceAccounting.Application.Tests.Users.Commands.RegisterUser
             IdentityError[] errors = { new() {Code = "DuplicateEmail" } };
             _userManagerMock.Setup(m => m.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Failed(errors));
-            var commandHandler = new RegisterUserCommandHandler(_userManagerMock.Object);
+            var commandHandler = new RegisterUserCommandHandler(_userManagerMock.Object, _categoryRepo);
 
             commandHandler.Invoking(h => h.Handle(_command, CancellationToken.None))
                 .Should().ThrowAsync<UserCreationException>()
@@ -37,7 +42,7 @@ namespace FinanceAccounting.Application.Tests.Users.Commands.RegisterUser
             IdentityError[] errors = { new() { Code = "DuplicateUserName" } };
             _userManagerMock.Setup(m => m.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Failed(errors));
-            var commandHandler = new RegisterUserCommandHandler(_userManagerMock.Object);
+            var commandHandler = new RegisterUserCommandHandler(_userManagerMock.Object, _categoryRepo);
 
             commandHandler.Invoking(h => h.Handle(_command, CancellationToken.None))
                 .Should().ThrowAsync<UserCreationException>()
@@ -55,23 +60,34 @@ namespace FinanceAccounting.Application.Tests.Users.Commands.RegisterUser
             IdentityError[] errors = { new() { Code = errorCode } };
             _userManagerMock.Setup(m => m.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Failed(errors));
-            var commandHandler = new RegisterUserCommandHandler(_userManagerMock.Object);
+            var commandHandler = new RegisterUserCommandHandler(_userManagerMock.Object, _categoryRepo);
 
             commandHandler.Invoking(h => h.Handle(_command, CancellationToken.None))
                 .Should().ThrowAsync<UserCreationException>()
                 .WithMessage(errorMessage);
         }
 
-        [Fact]
-        public void Create_new_user_if_command_is_correct()
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void Create_new_user_if_command_is_correct(bool addBaseCategories)
         {
+            int expectedUserCategoriesCount = 0;
+            if (addBaseCategories)
+            {
+                _command = new RegisterUserCommand("UserName", "user@mail.com", "password", "password", true);
+                expectedUserCategoriesCount = RegisterUserCommandHandler._baseCategories.Count;
+            }
+
             _userManagerMock.Setup(m => m.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Success);
-            var commandHandler = new RegisterUserCommandHandler(_userManagerMock.Object);
+            var commandHandler = new RegisterUserCommandHandler(_userManagerMock.Object, _categoryRepo);
             var expectedResult = new UserRegistrationResponse {UserName = "UserName", IsSucceeded = true};
 
             UserRegistrationResponse actualResult = commandHandler.Handle(_command, CancellationToken.None).Result;
+            int actualUserCategoriesCount = _categoryRepo.GetAllAsync().Result.Count(c => c.UserId == 0);
 
+            actualUserCategoriesCount.Should().Be(expectedUserCategoriesCount);
             actualResult.Should().BeEquivalentTo(expectedResult);
         }
     }

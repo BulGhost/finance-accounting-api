@@ -85,7 +85,7 @@ namespace FinanceAccounting.Application.Tests.Stubs
             throw new NotImplementedException();
         }
 
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public Task<int> SaveAsync(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

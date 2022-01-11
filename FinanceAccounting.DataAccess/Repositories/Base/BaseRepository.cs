@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using FinanceAccounting.DataAccess.DbContext;
-using FinanceAccounting.DataAccess.Exceptions;
 using FinanceAccounting.Domain.Entities.Base;
 using FinanceAccounting.Domain.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -63,44 +62,44 @@ namespace FinanceAccounting.DataAccess.Repositories.Base
         public virtual async Task<int> AddAsync(T entity, bool persist = true, CancellationToken cancellationToken = default)
         {
             Table.Add(entity);
-            return persist ? await SaveChangesAsync(cancellationToken) : 0;
+            return persist ? await SaveAsync(cancellationToken) : 0;
         }
 
         public virtual async Task<int> AddRangeAsync(IEnumerable<T> entities, bool persist = true, CancellationToken cancellationToken = default)
         {
             Table.AddRange(entities);
-            return persist ? await SaveChangesAsync(cancellationToken) : 0;
+            return persist ? await SaveAsync(cancellationToken) : 0;
         }
 
         public virtual async Task<int> UpdateAsync(T entity, bool persist = true, CancellationToken cancellationToken = default)
         {
             Table.Update(entity);
-            return persist ? await SaveChangesAsync(cancellationToken) : 0;
+            return persist ? await SaveAsync(cancellationToken) : 0;
         }
 
         public virtual async Task<int> UpdateRangeAsync(IEnumerable<T> entities, bool persist = true, CancellationToken cancellationToken = default)
         {
             Table.UpdateRange(entities);
-            return persist ? await SaveChangesAsync(cancellationToken) : 0;
+            return persist ? await SaveAsync(cancellationToken) : 0;
         }
 
         public virtual async Task<int> DeleteAsync(int id, bool persist = true, CancellationToken cancellationToken = default)
         {
             var entity = new T { Id = id };
             Context.Entry(entity).State = EntityState.Deleted;
-            return persist ? await SaveChangesAsync(cancellationToken) : 0;
+            return persist ? await SaveAsync(cancellationToken) : 0;
         }
 
         public virtual async Task<int> DeleteAsync(T entity, bool persist = true, CancellationToken cancellationToken = default)
         {
             Table.Remove(entity);
-            return persist ? await SaveChangesAsync(cancellationToken) : 0;
+            return persist ? await SaveAsync(cancellationToken) : 0;
         }
 
         public virtual async Task<int> DeleteRangeAsync(IEnumerable<T> entities, bool persist = true, CancellationToken cancellationToken = default)
         {
             Table.RemoveRange(entities);
-            return persist ? await SaveChangesAsync(cancellationToken) : 0;
+            return persist ? await SaveAsync(cancellationToken) : 0;
         }
 
         public virtual Task<T> FindAsync(int? id, CancellationToken cancellationToken = default) =>
@@ -115,22 +114,9 @@ namespace FinanceAccounting.DataAccess.Repositories.Base
         public Task ExecuteQueryAsync(string sql, object[] sqlParametersObjects, CancellationToken cancellationToken = default)
             => Context.Database.ExecuteSqlRawAsync(sql, sqlParametersObjects, cancellationToken);
 
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public Task<int> SaveAsync(CancellationToken cancellationToken = default)
         {
-            try
-            {
-                return Context.SaveChangesAsync(cancellationToken);
-            }
-            catch (FinanceAccountingException ex)
-            {
-                //TODO: Should handle intelligently - already logged
-                throw;
-            }
-            catch (Exception ex)
-            {
-                //TODO: Should log and handle intelligently
-                throw new FinanceAccountingException("An error occurred updating the database", ex);
-            }
+            return Context.SaveChangesAsync(cancellationToken);
         }
     }
 }

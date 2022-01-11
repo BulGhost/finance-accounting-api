@@ -37,7 +37,7 @@ namespace FinanceAccounting.Application.Users.Commands.RefreshToken
 
             RefreshTokenModel refreshToken = await _refreshTokenRepo.FindByTokenStringAsync(request.RefreshToken, cancellationToken);
             refreshToken.IsUsed = true;
-            await _refreshTokenRepo.SaveChangesAsync(cancellationToken);
+            await _refreshTokenRepo.SaveAsync(cancellationToken);
 
             User user = await _userManager.FindByIdAsync(refreshToken.UserId.ToString());
             return await _tokenGenerator.CreateTokensAsync(user, cancellationToken);

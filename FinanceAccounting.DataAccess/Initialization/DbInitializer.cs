@@ -57,9 +57,10 @@ namespace FinanceAccounting.DataAccess.Initialization
                 await ProcessInsert(context, context.Categories, TestData.Categories);
                 await ProcessInsert(context, context.Operations, TestData.Operations);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //TODO: Log and handle
+                await context.DisposeAsync();
+                throw;
             }
         }
 
@@ -86,6 +87,7 @@ namespace FinanceAccounting.DataAccess.Initialization
                 catch (Exception)
                 {
                     await transaction.RollbackAsync();
+                    throw;
                 }
             });
         }

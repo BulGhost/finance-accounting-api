@@ -30,18 +30,18 @@ namespace FinanceAccounting.DataAccess.DbContext
             }
             catch (RetryLimitExceededException ex)
             {
-                //TODO: Log and handle
-                throw new FinanceAccountingRetryLimitExceededException("There is a problem with SQl Server.", ex);
+                //TODO: Log
+                throw new DataAccessException("There is a problem with SQl Server.", ex);
             }
             catch (DbUpdateException ex)
             {
-                //TODO: Log and handle
-                throw new FinanceAccountingDbUpdateException("An error occurred updating the database", ex);
+                //TODO: Log
+                throw new DataAccessException("An error occurred updating the database", ex);
             }
             catch (Exception ex)
             {
-                //TODO: Log and handle
-                throw new FinanceAccountingException("An error occurred updating the database", ex);
+                //TODO: Log
+                throw new DataAccessException("An error occurred while saving changes to the database.", ex);
             }
         }
 

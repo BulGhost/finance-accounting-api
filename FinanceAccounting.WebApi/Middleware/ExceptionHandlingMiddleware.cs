@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using FinanceAccounting.Application.Common.Exceptions;
 using FinanceAccounting.Domain.Exceptions.Base;
+using FinanceAccounting.WebApi.ViewModels;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 
@@ -10,6 +13,8 @@ namespace FinanceAccounting.WebApi.Middleware
 {
     public sealed class ExceptionHandlingMiddleware : IMiddleware
     {
+        private const string _defaultErrorMessage = "An error occurred on the server side, please contact support";
+
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             try
@@ -22,15 +27,16 @@ namespace FinanceAccounting.WebApi.Middleware
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception exception) //TODO: add exception types
+        private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var code = HttpStatusCode.InternalServerError;
-            var result = string.Empty;
+            var result = new ErrorDetails { ErrorMessage = exception.Message };
+
             switch (exception)
             {
                 case ValidationException validationException:
-                    code = HttpStatusCode.UnprocessableEntity;
-                    result = JsonSerializer.Serialize(validationException.Errors);
+                    code = HttpStatusCode.BadRequest;
+                    result.ErrorMessage = validationException.Errors.FirstOrDefault()?.ErrorMessage;
                     break;
                 case NotFoundException:
                     code = HttpStatusCode.NotFound;
@@ -38,17 +44,22 @@ namespace FinanceAccounting.WebApi.Middleware
                 case BadRequestException:
                     code = HttpStatusCode.BadRequest;
                     break;
+                case UserAuthenticationException:
+                case TokenValidationException:
+                    code = HttpStatusCode.Unauthorized;
+                    break;
+                default:
+                    result.ErrorMessage = _defaultErrorMessage;
+                    break;
             }
 
+            result.StatusCode = (int)code;
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)code;
+            context.Response.StatusCode = result.StatusCode;
 
-            if (result == string.Empty)
-            {
-                result = JsonSerializer.Serialize(new { error = exception.Message });
-            }
+            string response = JsonSerializer.Serialize(result);
 
-            return context.Response.WriteAsync(result);
+            return context.Response.WriteAsync(response);
         }
     }
 }

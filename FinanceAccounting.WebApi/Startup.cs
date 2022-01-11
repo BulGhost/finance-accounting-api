@@ -1,24 +1,13 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using System.Reflection;
 using FinanceAccounting.Application;
-using FinanceAccounting.Application.Abstractions.Repo;
-using FinanceAccounting.Application.Abstractions.Security;
 using FinanceAccounting.Application.Common.Mappings;
-using FinanceAccounting.Application.Common.Models;
 using FinanceAccounting.DataAccess;
-using FinanceAccounting.DataAccess.DbContext;
-using FinanceAccounting.Domain.Entities;
-using FinanceAccounting.Security;
 using FinanceAccounting.WebApi.Middleware;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 
 namespace FinanceAccounting.WebApi
 {
@@ -39,82 +28,15 @@ namespace FinanceAccounting.WebApi
                 config.AddProfile(new AssemblyMappingProfile(Assembly.GetAssembly(typeof(AssemblyMappingProfile))));
             });
 
-            services.AddApplication();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDataAccess(connection);
+            services.AddApplication();
             services.AddTransient<ExceptionHandlingMiddleware>();
-            services.AddCors(); //TODO: Delete?
+            services.AddCors();
             services.AddControllers();
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "FinanceAccounting.WebApi", Version = "v1" });
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please insert JWT with Bearer into field",
-                    Name = "Authorization",
-                    BearerFormat = "JWT",
-                    Scheme = "bearer",
-                    Type = SecuritySchemeType.ApiKey
-                });
-
-                var securityScheme = new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference {Type = ReferenceType.SecurityScheme, Id = "Bearer"}
-                };
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {securityScheme, new string[] { }}
-                });
-            });
-
-            services.AddIdentityCore<User>(options =>
-                {
-                    options.User.RequireUniqueEmail = true;
-                    options.Password = new PasswordOptions
-                    {
-                        RequiredLength = 6,
-                        RequireLowercase = true,
-                        RequireUppercase = true,
-                        RequireDigit = true,
-                        RequireNonAlphanumeric = false
-                    };
-                })
-                .AddEntityFrameworkStores<BookkeepingDbContext>()
-                .AddUserManager<UserManager<User>>();
-
-            var jwtConfig = new AuthenticationConfig();
-            Configuration.GetSection("Jwt").Bind(jwtConfig);
-            Func<string, SecurityKey> getSigningKeyFunc = SigningSymmetricKey.GetKey;
-            services.AddScoped<ITokenGenerator>(provider => new TokenGenerator(
-                jwtConfig, getSigningKeyFunc, provider.GetService<IRefreshTokenRepo>()));
-            services.AddScoped<ITokenValidator, TokenValidator>();
-
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidIssuer = jwtConfig.Issuer,
-                ValidAlgorithms = new[] {jwtConfig.SigningAlgorithm},
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = getSigningKeyFunc(jwtConfig.AccessTokenSecret),
-                ValidateAudience = false,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
-            services.AddSingleton(tokenValidationParameters);
-
-            services.AddAuthentication(option =>
-                {
-                    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = tokenValidationParameters;
-                    options.MapInboundClaims = false;
-                });
+            services.AddCustomSwagger();
+            services.AddCustomIdentity();
+            services.AddCustomAuthentication(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

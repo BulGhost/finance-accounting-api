@@ -18,6 +18,6 @@ namespace FinanceAccounting.Domain.Repository
         Task<T> FindAsNoTrackingAsync(int id, CancellationToken cancellationToken = default);
         Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
         Task ExecuteQueryAsync(string sql, object[] sqlParametersObjects, CancellationToken cancellationToken = default);
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+        Task<int> SaveAsync(CancellationToken cancellationToken = default);
     }
 }
