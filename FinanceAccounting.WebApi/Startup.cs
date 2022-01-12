@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Reflection;
 using FinanceAccounting.Application;
-using FinanceAccounting.Application.Common.Mappings;
 using FinanceAccounting.DataAccess;
 using FinanceAccounting.WebApi.Middleware;
 using FinanceAccounting.WebApi.ViewModels.HelperClasses;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace FinanceAccounting.WebApi
 {
@@ -30,18 +32,37 @@ namespace FinanceAccounting.WebApi
             services.AddCors();
             services.AddControllers().AddJsonOptions(opt =>
                 opt.JsonSerializerOptions.Converters.Add(new DateTimeConverter()));
-            services.AddCustomSwagger();
+            services.AddVersionedApiExplorer(opt =>
+            {
+                opt.GroupNameFormat = "'v'VVV";
+                opt.SubstituteApiVersionInUrl = true;
+            });
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddSwaggerGen();
             services.AddCustomIdentity();
             services.AddCustomAuthentication(Configuration);
+            services.AddApiVersioning(opt =>
+            {
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ReportApiVersions = true;
+            });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FinanceAccounting.WebApi v1"));
+                app.UseSwaggerUI(config =>
+                {
+                    foreach (ApiVersionDescription description in provider.ApiVersionDescriptions)
+                    {
+                        config.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+                            description.GroupName.ToUpperInvariant());
+                    }
+                });
             }
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -50,6 +71,7 @@ namespace FinanceAccounting.WebApi
             app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseApiVersioning();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }

@@ -14,7 +14,8 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace FinanceAccounting.WebApi.Controllers
 {
-    [Route("api/[action]")]
+    [ApiVersionNeutral]
+    [Route("api/v{version:apiVersion}/[action]")]
     public class UserController : BaseCrudController
     {
         private readonly TokenValidationParameters _tokenValidationParameters;

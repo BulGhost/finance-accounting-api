@@ -7,7 +7,7 @@ namespace FinanceAccounting.WebApi.Controllers.Base
 {
     [ApiController]
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public abstract class BaseCrudController : ControllerBase
     {
         private readonly IMediator _mediator;

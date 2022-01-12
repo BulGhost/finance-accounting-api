@@ -18,51 +18,6 @@ namespace FinanceAccounting.WebApi
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
-        {
-            services.AddSwaggerGen(c =>
-            {
-                string appVersion = Assembly.GetExecutingAssembly().GetName().Version?.Major.ToString();
-                c.SwaggerDoc($"v{appVersion}", new OpenApiInfo
-                {
-                    Title = "Finance Accounting API",
-                    Version = $"v{appVersion}",
-                    Description = "An API for financial accounting",
-                    Contact = new OpenApiContact
-                    {
-                        Name = "Dmitriy Bulynko",
-                        Email = "bulynko.dmitriy@gmail.com"
-                    }
-                });
-
-                string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-                c.MapType<DateTime>(() => new OpenApiSchema{Type = "string", Format = "date"});
-
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please insert JWT with Bearer into field",
-                    Name = "Authorization",
-                    BearerFormat = "JWT",
-                    Scheme = "bearer",
-                    Type = SecuritySchemeType.ApiKey
-                });
-
-                var securityScheme = new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                };
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {securityScheme, new string[] { }}
-                });
-            });
-
-            return services;
-        }
-
         public static IServiceCollection AddCustomIdentity(this IServiceCollection services)
         {
             services.AddIdentityCore<User>(options =>
