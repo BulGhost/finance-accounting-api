@@ -7,22 +7,22 @@ namespace FinanceAccounting.Application.Common.Mappings
 {
     public class AssemblyMappingProfile : Profile
     {
-        public AssemblyMappingProfile(Assembly assembly)
+        public AssemblyMappingProfile()
         {
-            ApplyMappingFromAssembly(assembly);
+            ApplyMappingFromAssembly();
         }
 
-        private void ApplyMappingFromAssembly(Assembly assembly)
+        private void ApplyMappingFromAssembly()
         {
-            var types = assembly.GetExportedTypes()
-                .Where(type => type.GetInterfaces()
-                    .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMapFrom<>)))
+            var assembly = Assembly.GetExecutingAssembly();
+            var mappableTypes = assembly.GetExportedTypes()
+                .Where(type => typeof(IMappable).IsAssignableFrom(type) && !type.IsInterface)
                 .ToList();
 
-            foreach (Type type in types)
+            foreach (Type type in mappableTypes)
             {
                 object instance = Activator.CreateInstance(type);
-                MethodInfo methodInfo = type.GetMethod(nameof(IMapFrom<object>.Mapping));
+                MethodInfo methodInfo = type.GetMethod(nameof(IMappable.Mapping));
                 methodInfo?.Invoke(instance, new object[] {this});
             }
         }

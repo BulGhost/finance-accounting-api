@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace FinanceAccounting.WebApi.Controllers.Base
 {
     [ApiController]
+    [Produces("application/json")]
     [Route("api/[controller]")]
     public abstract class BaseCrudController : ControllerBase
     {

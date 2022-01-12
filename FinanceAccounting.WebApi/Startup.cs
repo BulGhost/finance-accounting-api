@@ -8,6 +8,7 @@ using FinanceAccounting.Application;
 using FinanceAccounting.Application.Common.Mappings;
 using FinanceAccounting.DataAccess;
 using FinanceAccounting.WebApi.Middleware;
+using FinanceAccounting.WebApi.ViewModels.HelperClasses;
 
 namespace FinanceAccounting.WebApi
 {
@@ -22,18 +23,13 @@ namespace FinanceAccounting.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(config =>
-            {
-                config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
-                config.AddProfile(new AssemblyMappingProfile(Assembly.GetAssembly(typeof(AssemblyMappingProfile))));
-            });
-
+            services.AddApplication();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDataAccess(connection);
-            services.AddApplication();
             services.AddTransient<ExceptionHandlingMiddleware>();
             services.AddCors();
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(opt =>
+                opt.JsonSerializerOptions.Converters.Add(new DateTimeConverter()));
             services.AddCustomSwagger();
             services.AddCustomIdentity();
             services.AddCustomAuthentication(Configuration);

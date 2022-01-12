@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using FinanceAccounting.Application.Abstractions.Repo;
 using FinanceAccounting.Application.Abstractions.Security;
@@ -22,7 +23,23 @@ namespace FinanceAccounting.WebApi
             services.AddSwaggerGen(c =>
             {
                 string appVersion = Assembly.GetExecutingAssembly().GetName().Version?.Major.ToString();
-                c.SwaggerDoc($"v{appVersion}", new OpenApiInfo { Title = "Finance Accounting API", Version = $"v{appVersion}" });
+                c.SwaggerDoc($"v{appVersion}", new OpenApiInfo
+                {
+                    Title = "Finance Accounting API",
+                    Version = $"v{appVersion}",
+                    Description = "An API for financial accounting",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Dmitriy Bulynko",
+                        Email = "bulynko.dmitriy@gmail.com"
+                    }
+                });
+
+                string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+                c.MapType<DateTime>(() => new OpenApiSchema{Type = "string", Format = "date"});
+
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,

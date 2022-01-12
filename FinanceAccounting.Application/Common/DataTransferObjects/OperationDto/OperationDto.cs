@@ -5,7 +5,7 @@ using FinanceAccounting.Domain.Entities;
 
 namespace FinanceAccounting.Application.Common.DataTransferObjects.OperationDto
 {
-    public class OperationDto : IMapFrom<Operation>
+    public class OperationDto : IMappable
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }

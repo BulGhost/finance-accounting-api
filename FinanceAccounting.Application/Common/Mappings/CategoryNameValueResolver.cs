@@ -5,11 +5,11 @@ using FinanceAccounting.Domain.Repository;
 
 namespace FinanceAccounting.Application.Common.Mappings
 {
-    internal class CategoryNameValueResolver : IValueResolver<Operation, OperationDto, string>
+    public class CategoryNameValueResolver : IValueResolver<Operation, OperationDto, string>
     {
         private readonly ICategoryRepo _repo;
 
-        internal CategoryNameValueResolver(ICategoryRepo repo)
+        public CategoryNameValueResolver(ICategoryRepo repo)
         {
             _repo = repo;
         }

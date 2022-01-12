@@ -14,6 +14,7 @@ namespace FinanceAccounting.Application
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             ValidatorOptions.Global.LanguageManager.Enabled = false;
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             return services;
         }

@@ -76,13 +76,13 @@ namespace FinanceAccounting.Application.Tests.Users.Commands.RegisterUser
             if (addBaseCategories)
             {
                 _command = new RegisterUserCommand("UserName", "user@mail.com", "password", "password", true);
-                expectedUserCategoriesCount = RegisterUserCommandHandler._baseCategories.Count;
+                expectedUserCategoriesCount = RegisterUserHelper.GetBaseCategories().Count;
             }
 
             _userManagerMock.Setup(m => m.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Success);
             var commandHandler = new RegisterUserCommandHandler(_userManagerMock.Object, _categoryRepo);
-            var expectedResult = new UserRegistrationResponse {UserName = "UserName", IsSucceeded = true};
+            var expectedResult = new UserRegistrationResponse {CreatedUserName = "UserName", IsSucceeded = true};
 
             UserRegistrationResponse actualResult = commandHandler.Handle(_command, CancellationToken.None).Result;
             int actualUserCategoriesCount = _categoryRepo.GetAllAsync().Result.Count(c => c.UserId == 0);

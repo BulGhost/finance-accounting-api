@@ -2,7 +2,7 @@
 {
     public class UserRegistrationResponse
     {
-        public string UserName { get; set; }
+        public string CreatedUserName { get; set; }
         public bool IsSucceeded { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
@@ -14,6 +14,7 @@ namespace FinanceAccounting.WebApi.Middleware
     public sealed class ExceptionHandlingMiddleware : IMiddleware
     {
         private const string _defaultErrorMessage = "An error occurred on the server side, please contact support";
+        private const string _requestCancelledMessage = "Request was cancelled";
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
@@ -47,6 +48,10 @@ namespace FinanceAccounting.WebApi.Middleware
                 case UserAuthenticationException:
                 case TokenValidationException:
                     code = HttpStatusCode.Unauthorized;
+                    break;
+                case OperationCanceledException:
+                    code = HttpStatusCode.BadRequest;
+                    result.ErrorMessage = _requestCancelledMessage;
                     break;
                 default:
                     result.ErrorMessage = _defaultErrorMessage;

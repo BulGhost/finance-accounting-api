@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,45 +11,10 @@ using FinanceAccounting.Domain.Repository;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-[assembly: InternalsVisibleTo("FinanceAccounting.Application.Tests")]
-
 namespace FinanceAccounting.Application.Users.Commands.RegisterUser
 {
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, UserRegistrationResponse>
     {
-        internal static readonly List<CreateCategoryDto> _baseCategories = new()
-        {
-            new CreateCategoryDto { Type = OperationType.Income, Name = "Salary" },
-            new CreateCategoryDto { Type = OperationType.Income, Name = "Passive income" },
-            new CreateCategoryDto { Type = OperationType.Income, Name = "Gift" },
-            new CreateCategoryDto { Type = OperationType.Income, Name = "Sale of property" },
-            new CreateCategoryDto { Type = OperationType.Income, Name = "Part-time" },
-            new CreateCategoryDto { Type = OperationType.Income, Name = "Inheritance" },
-            new CreateCategoryDto { Type = OperationType.Income, Name = "Rent" },
-            new CreateCategoryDto { Type = OperationType.Income, Name = "Subsidy" },
-            new CreateCategoryDto { Type = OperationType.Income, Name = "Material aid" },
-            new CreateCategoryDto { Type = OperationType.Income, Name = "Pension" },
-            new CreateCategoryDto { Type = OperationType.Income, Name = "Scholarship" },
-            new CreateCategoryDto { Type = OperationType.Income, Name = "Insurance" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Car" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Charity" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Utilities" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Furniture" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Medicine" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Clothing and Footwear" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Nutrition" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Gifts" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Entertainment" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Regular payments" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Repair" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Hygiene products" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Technique" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Transport" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Services" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Household goods" },
-            new CreateCategoryDto { Type = OperationType.Expense, Name = "Commission" }
-        };
-
         private readonly UserManager<User> _userManager;
         private readonly ICategoryRepo _categoryRepo;
 
@@ -78,7 +42,7 @@ namespace FinanceAccounting.Application.Users.Commands.RegisterUser
 
             return new UserRegistrationResponse
             {
-                UserName = user.UserName,
+                CreatedUserName = user.UserName,
                 IsSucceeded = true
             };
         }
@@ -106,7 +70,7 @@ namespace FinanceAccounting.Application.Users.Commands.RegisterUser
                     .ForMember(c => c.CategoryName, opt => opt.MapFrom(dto => dto.Name)));
 
             IMapper mapper = config.CreateMapper();
-            var baseCategories = mapper.Map<IEnumerable<Category>>(_baseCategories);
+            var baseCategories = mapper.Map<IEnumerable<Category>>(RegisterUserHelper.GetBaseCategories());
             return _categoryRepo.AddRangeAsync(baseCategories, true, cancellationToken);
         }
     }

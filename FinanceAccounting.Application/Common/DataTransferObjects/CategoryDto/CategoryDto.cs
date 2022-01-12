@@ -4,7 +4,7 @@ using FinanceAccounting.Domain.Entities;
 
 namespace FinanceAccounting.Application.Common.DataTransferObjects.CategoryDto
 {
-    public class CategoryDto : IMapFrom<Category>
+    public class CategoryDto : IMappable
     {
         public int Id { get; set; }
         public OperationType Type { get; set; }
