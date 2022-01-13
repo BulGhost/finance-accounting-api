@@ -16,10 +16,6 @@ namespace FinanceAccounting.DataAccess.Repositories
         {
         }
 
-        internal UserRepo(DbContextOptions<BookkeepingDbContext> options) : base(options)
-        {
-        }
-
         public override Task<User> FindAsync(int? id, CancellationToken cancellationToken = default) =>
             Table
                 .Where(user => user.Id == id)

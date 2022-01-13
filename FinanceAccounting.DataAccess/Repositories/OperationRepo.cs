@@ -16,10 +16,6 @@ namespace FinanceAccounting.DataAccess.Repositories
         {
         }
 
-        internal OperationRepo(DbContextOptions<BookkeepingDbContext> options) : base(options)
-        {
-        }
-
         public async Task<OperationType> GetOperationTypeByCategoryIdAsync(int categoryId)
         {
             Category category = await Context.Categories.FindAsync(categoryId);

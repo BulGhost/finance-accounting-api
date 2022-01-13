@@ -4,8 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using FinanceAccounting.Application;
+using FinanceAccounting.Application.Abstractions;
 using FinanceAccounting.DataAccess;
 using FinanceAccounting.WebApi.Middleware;
+using FinanceAccounting.WebApi.Services;
 using FinanceAccounting.WebApi.ViewModels.HelperClasses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -47,6 +49,8 @@ namespace FinanceAccounting.WebApi
                 opt.DefaultApiVersion = new ApiVersion(1, 0);
                 opt.ReportApiVersions = true;
             });
+            services.AddSingleton<ICurrentUserService, CurrentUserService>();
+            services.AddHttpContextAccessor();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)

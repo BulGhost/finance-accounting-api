@@ -11,7 +11,6 @@ namespace FinanceAccounting.DataAccess.Repositories.Base
 {
     public abstract class BaseRepository<T> : IRepository<T> where T : class, IEntity<int>, new()
     {
-        private readonly bool _disposeContext;
         private bool _isDisposed;
 
         public BookkeepingDbContext Context { get; }
@@ -21,13 +20,6 @@ namespace FinanceAccounting.DataAccess.Repositories.Base
         {
             Context = context;
             Table = Context.Set<T>();
-            _disposeContext = false;
-        }
-
-        protected BaseRepository(DbContextOptions<BookkeepingDbContext> options)
-            : this(new BookkeepingDbContext(options))
-        {
-            _disposeContext = true;
         }
 
         public void Dispose()
@@ -41,14 +33,6 @@ namespace FinanceAccounting.DataAccess.Repositories.Base
             if (_isDisposed)
             {
                 return;
-            }
-
-            if (disposing)
-            {
-                if (_disposeContext)
-                {
-                    Context.Dispose();
-                }
             }
 
             _isDisposed = true;

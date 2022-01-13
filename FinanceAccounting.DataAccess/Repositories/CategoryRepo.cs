@@ -16,10 +16,6 @@ namespace FinanceAccounting.DataAccess.Repositories
         {
         }
 
-        internal CategoryRepo(DbContextOptions<BookkeepingDbContext> options) : base(options)
-        {
-        }
-
         public Task<bool> IsCategoryExistsAsync(int userId, OperationType operationType, string categoryName, CancellationToken cancellationToken = default)
         {
             return Context.Users

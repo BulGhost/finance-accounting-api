@@ -9,13 +9,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
 
 namespace FinanceAccounting.DataAccess.DbContext
 {
     public class BookkeepingDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
-        public BookkeepingDbContext(DbContextOptions<BookkeepingDbContext> options) : base(options)
+        private readonly ILogger _logger;
+
+        public BookkeepingDbContext(DbContextOptions<BookkeepingDbContext> options, ILogger<BookkeepingDbContext> logger)
+            : base(options)
         {
+            _logger = logger;
         }
 
         public DbSet<Category> Categories { get; set; }
@@ -30,17 +35,17 @@ namespace FinanceAccounting.DataAccess.DbContext
             }
             catch (RetryLimitExceededException ex)
             {
-                //TODO: Log
+                _logger.LogError(ex, "Query retry limit exceeded");
                 throw new DataAccessException("There is a problem with SQl Server.", ex);
             }
             catch (DbUpdateException ex)
             {
-                //TODO: Log
+                _logger.LogError(ex, "Error while saving to the database");
                 throw new DataAccessException("An error occurred updating the database", ex);
             }
             catch (Exception ex)
             {
-                //TODO: Log
+                _logger.LogError(ex, "Error while saving changes in the context to the database");
                 throw new DataAccessException("An error occurred while saving changes to the database.", ex);
             }
         }

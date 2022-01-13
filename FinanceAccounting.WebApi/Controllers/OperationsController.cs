@@ -57,7 +57,7 @@ namespace FinanceAccounting.WebApi.Controllers
         /// </summary>
         /// <remarks>
         /// Sample request:
-        ///     GET api/Operations/period-report?startDate=2022-01-01&finalDate=2022-01-10
+        ///     GET api/Operations/period-report?startDate=2020-10-10&amp;finalDate=2020-10-11
         /// </remarks>
         /// <param name="startDate">Start date on which the report is to be generated</param>
         /// <param name="finalDate">Final on which the report is to be generated</param>

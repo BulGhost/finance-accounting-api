@@ -17,10 +17,6 @@ namespace FinanceAccounting.DataAccess.Repositories
         {
         }
 
-        internal RefreshTokenRepo(DbContextOptions<BookkeepingDbContext> options) : base(options)
-        {
-        }
-
         public Task<RefreshToken> FindByTokenStringAsync(string token, CancellationToken cancellationToken = default)
         {
             return Table.FirstOrDefaultAsync(rt => rt.Token == token, cancellationToken);
