@@ -86,21 +86,21 @@ namespace FinanceAccounting.DataAccess.Repositories.Base
             return persist ? await SaveAsync(cancellationToken) : 0;
         }
 
-        public virtual Task<T> FindAsync(int? id, CancellationToken cancellationToken = default) =>
-            Table.FindAsync(new object[] {id}, cancellationToken).AsTask();
+        public virtual async Task<T> FindAsync(int? id, CancellationToken cancellationToken = default) =>
+            await Table.FindAsync(new object[] {id}, cancellationToken).AsTask();
 
-        public virtual Task<T> FindAsNoTrackingAsync(int id, CancellationToken cancellationToken = default) =>
-            Table.AsNoTrackingWithIdentityResolution().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        public virtual async Task<T> FindAsNoTrackingAsync(int id, CancellationToken cancellationToken = default) =>
+            await Table.AsNoTrackingWithIdentityResolution().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         public virtual async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default) =>
             await Table.ToListAsync(cancellationToken);
 
-        public Task ExecuteQueryAsync(string sql, object[] sqlParametersObjects, CancellationToken cancellationToken = default)
-            => Context.Database.ExecuteSqlRawAsync(sql, sqlParametersObjects, cancellationToken);
+        public async Task ExecuteQueryAsync(string sql, object[] sqlParametersObjects, CancellationToken cancellationToken = default)
+            => await Context.Database.ExecuteSqlRawAsync(sql, sqlParametersObjects, cancellationToken);
 
-        public Task<int> SaveAsync(CancellationToken cancellationToken = default)
+        public async Task<int> SaveAsync(CancellationToken cancellationToken = default)
         {
-            return Context.SaveChangesAsync(cancellationToken);
+            return await Context.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -27,11 +27,11 @@ namespace FinanceAccounting.DataAccess.DbContext
         public DbSet<Operation> Operations { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                return base.SaveChangesAsync(cancellationToken);
+                return await base.SaveChangesAsync(cancellationToken);
             }
             catch (RetryLimitExceededException ex)
             {

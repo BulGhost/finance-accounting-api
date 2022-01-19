@@ -16,15 +16,15 @@ namespace FinanceAccounting.DataAccess.Repositories
         {
         }
 
-        public override Task<User> FindAsync(int? id, CancellationToken cancellationToken = default) =>
-            Table
+        public override async Task<User> FindAsync(int? id, CancellationToken cancellationToken = default) =>
+            await Table
                 .Where(user => user.Id == id)
                 .Include(user => user.Categories)
                 .Include(user => user.Operations)
                 .FirstOrDefaultAsync(cancellationToken);
 
-        public override Task<User> FindAsNoTrackingAsync(int id, CancellationToken cancellationToken = default) =>
-            Table
+        public override async Task<User> FindAsNoTrackingAsync(int id, CancellationToken cancellationToken = default) =>
+            await Table
                 .Where(user => user.Id == id)
                 .Include(user => user.Categories)
                 .Include(user => user.Operations)

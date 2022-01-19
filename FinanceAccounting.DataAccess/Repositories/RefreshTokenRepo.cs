@@ -17,9 +17,9 @@ namespace FinanceAccounting.DataAccess.Repositories
         {
         }
 
-        public Task<RefreshToken> FindByTokenStringAsync(string token, CancellationToken cancellationToken = default)
+        public async Task<RefreshToken> FindByTokenStringAsync(string token, CancellationToken cancellationToken = default)
         {
-            return Table.FirstOrDefaultAsync(rt => rt.Token == token, cancellationToken);
+            return await Table.FirstOrDefaultAsync(rt => rt.Token == token, cancellationToken);
         }
 
         public async Task<IEnumerable<RefreshToken>> FindAllActiveTokensByUserIdAsync(int userId, CancellationToken cancellationToken = default)

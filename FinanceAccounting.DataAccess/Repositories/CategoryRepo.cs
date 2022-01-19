@@ -16,9 +16,9 @@ namespace FinanceAccounting.DataAccess.Repositories
         {
         }
 
-        public Task<bool> IsCategoryExistsAsync(int userId, OperationType operationType, string categoryName, CancellationToken cancellationToken = default)
+        public async Task<bool> IsCategoryExistsAsync(int userId, OperationType operationType, string categoryName, CancellationToken cancellationToken = default)
         {
-            return Context.Users
+            return await Context.Users
                 .Where(u => u.Id == userId)
                 .AnyAsync(u => u.Categories
                     .Any(c => c.CategoryName == categoryName && c.Type == operationType), cancellationToken);
