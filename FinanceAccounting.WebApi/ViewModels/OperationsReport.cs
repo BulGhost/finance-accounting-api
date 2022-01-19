@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using FinanceAccounting.Application.Common.DataTransferObjects.OperationDto;
+using FinanceAccounting.BusinessLogic.Common.DataTransferObjects.OperationDto;
 
 namespace FinanceAccounting.WebApi.ViewModels
 {

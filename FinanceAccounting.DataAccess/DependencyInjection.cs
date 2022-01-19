@@ -1,4 +1,4 @@
-﻿using FinanceAccounting.Application.Abstractions.Repo;
+﻿using FinanceAccounting.BusinessLogic.Abstractions.Repo;
 using FinanceAccounting.DataAccess.DbContext;
 using FinanceAccounting.DataAccess.Repositories;
 using FinanceAccounting.Domain.Repository;

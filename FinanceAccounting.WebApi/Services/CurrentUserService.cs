@@ -1,6 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using FinanceAccounting.Application.Abstractions;
+using FinanceAccounting.BusinessLogic.Abstractions;
 using Microsoft.AspNetCore.Http;
 
 namespace FinanceAccounting.WebApi.Services

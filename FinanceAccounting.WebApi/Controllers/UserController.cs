@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using FinanceAccounting.Application.Common.DataTransferObjects.UserDto;
-using FinanceAccounting.Application.Users.Commands.RefreshToken;
-using FinanceAccounting.Application.Users.Commands.RegisterUser;
-using FinanceAccounting.Application.Users.Queries.AuthenticateUser;
-using FinanceAccounting.Application.Users.Queries.LogoutUser;
+using FinanceAccounting.BusinessLogic.Common.DataTransferObjects.UserDto;
+using FinanceAccounting.BusinessLogic.Users.Commands.RefreshToken;
+using FinanceAccounting.BusinessLogic.Users.Commands.RegisterUser;
+using FinanceAccounting.BusinessLogic.Users.Queries.AuthenticateUser;
+using FinanceAccounting.BusinessLogic.Users.Queries.LogoutUser;
 using FinanceAccounting.WebApi.Controllers.Base;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,7 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace FinanceAccounting.WebApi.Controllers
 {
     [ApiVersionNeutral]
-    [Route("api/v{version:apiVersion}/[action]")]
+    [Route("api/v{version:apiVersion}")]
     public class UserController : BaseCrudController
     {
         private readonly TokenValidationParameters _tokenValidationParameters;
@@ -46,10 +46,10 @@ namespace FinanceAccounting.WebApi.Controllers
         /// <returns>Created user name and command result</returns>
         /// <response code="200">Success</response>
         /// <response code="400">If the submitted user details are invalid</response>
-        [HttpPost]
+        [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
+        public async Task<IActionResult> Register(RegisterUserCommand command)
         {
             UserRegistrationResponse response = await Mediator.Send(command);
             return Ok(response);
@@ -72,12 +72,12 @@ namespace FinanceAccounting.WebApi.Controllers
         /// <response code="400">If the authentication details are invalid</response>
         /// <response code="401">If the specified password is incorrect</response>
         /// <response code="404">If the user with the specified name is not found</response>
-        [HttpPost]
+        [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Login([FromBody] AuthenticateUserQuery query)
+        public async Task<IActionResult> Login(AuthenticateUserQuery query)
         {
             UserAuthenticationResponse response = await Mediator.Send(query);
             return Ok(response);
@@ -88,7 +88,7 @@ namespace FinanceAccounting.WebApi.Controllers
         /// </summary>
         /// <remarks>
         /// Sample request:
-        ///     POST /api/refreshToken
+        ///     POST /api/refresh-token
         ///     {
         ///         "accessToken": "8lkyB6SJRJfE2Eo2Q6oR4Ugk5I1IZ47Z413Ygadq",
         ///         "refreshToken": "vkoJ8gWG2Z0BLAsmn8cX"
@@ -99,11 +99,11 @@ namespace FinanceAccounting.WebApi.Controllers
         /// <response code="200">Success</response>
         /// <response code="400">If one or both of the specified tokens are empty</response>
         /// <response code="401">If tokens validation fails</response>
-        [HttpPost]
+        [HttpPost("refresh-token")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand command)
+        public async Task<IActionResult> RefreshToken(RefreshTokenCommand command)
         {
             UserAuthenticationResponse response = await Mediator.Send(command);
             return Ok(response);
@@ -120,7 +120,7 @@ namespace FinanceAccounting.WebApi.Controllers
         /// <response code="204">Success</response>
         /// <response code="401">If the user is unauthorized</response>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpDelete]
+        [HttpDelete("logout")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Logout()

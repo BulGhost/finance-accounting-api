@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
-using FinanceAccounting.Application.Abstractions.Repo;
-using FinanceAccounting.Application.Common.DataTransferObjects.UserDto;
-using FinanceAccounting.Application.Common.Models;
-using FinanceAccounting.Application.Users.Commands.RefreshToken;
+using FinanceAccounting.BusinessLogic.Abstractions.Repo;
+using FinanceAccounting.BusinessLogic.Common.DataTransferObjects.UserDto;
+using FinanceAccounting.BusinessLogic.Common.Models;
+using FinanceAccounting.BusinessLogic.Users.Commands.RefreshToken;
 using FinanceAccounting.Domain.Entities;
 using FluentAssertions;
 using Microsoft.IdentityModel.Tokens;

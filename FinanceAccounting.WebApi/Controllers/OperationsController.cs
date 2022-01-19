@@ -2,12 +2,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using FinanceAccounting.Application.Common.DataTransferObjects.OperationDto;
-using FinanceAccounting.Application.Operations.Commands.AddOperations;
-using FinanceAccounting.Application.Operations.Commands.DeleteOperations;
-using FinanceAccounting.Application.Operations.Commands.UpdateOperations;
-using FinanceAccounting.Application.Operations.Queries.GetDaysOperationsReport;
-using FinanceAccounting.Application.Operations.Queries.GetPeriodsOperationsReport;
+using FinanceAccounting.BusinessLogic.Common.DataTransferObjects.OperationDto;
+using FinanceAccounting.BusinessLogic.Operations.Commands.AddOperations;
+using FinanceAccounting.BusinessLogic.Operations.Commands.DeleteOperations;
+using FinanceAccounting.BusinessLogic.Operations.Commands.UpdateOperations;
+using FinanceAccounting.BusinessLogic.Operations.Queries.GetDaysOperationsReport;
+using FinanceAccounting.BusinessLogic.Operations.Queries.GetPeriodsOperationsReport;
 using FinanceAccounting.WebApi.Controllers.Base;
 using FinanceAccounting.WebApi.ViewModels;
 using FinanceAccounting.WebApi.ViewModels.HelperClasses;
@@ -110,7 +110,7 @@ namespace FinanceAccounting.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> AddOperations(
-            [FromBody] CreateOperationDto[] operations, CancellationToken cancellationToken = default)
+            CreateOperationDto[] operations, CancellationToken cancellationToken = default)
         {
             var command = new AddOperationsCommand(UserId, operations);
             var addedOperations = await Mediator.Send(command, cancellationToken);
@@ -150,7 +150,7 @@ namespace FinanceAccounting.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UpdateOperations(
-            [FromBody] UpdateOperationDto[] operations, CancellationToken cancellationToken = default)
+            UpdateOperationDto[] operations, CancellationToken cancellationToken = default)
         {
             var command = new UpdateOperationsCommand(UserId, operations);
             var updatedOperations = await Mediator.Send(command, cancellationToken);
@@ -178,7 +178,7 @@ namespace FinanceAccounting.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteOperations(
-            [FromBody] int[] operationIds, CancellationToken cancellationToken = default)
+            int[] operationIds, CancellationToken cancellationToken = default)
         {
             var command = new DeleteOperationsCommand(UserId, operationIds);
             var deletedOperationIds = await Mediator.Send(command, cancellationToken);

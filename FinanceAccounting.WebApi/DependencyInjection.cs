@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
-using FinanceAccounting.Application.Abstractions.Repo;
-using FinanceAccounting.Application.Abstractions.Security;
-using FinanceAccounting.Application.Common.Models;
+using FinanceAccounting.BusinessLogic.Abstractions.Repo;
+using FinanceAccounting.BusinessLogic.Abstractions.Security;
+using FinanceAccounting.BusinessLogic.Common.Models;
 using FinanceAccounting.DataAccess.DbContext;
 using FinanceAccounting.Domain.Entities;
 using FinanceAccounting.Security;
@@ -11,7 +9,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Configuration;
 
 namespace FinanceAccounting.WebApi

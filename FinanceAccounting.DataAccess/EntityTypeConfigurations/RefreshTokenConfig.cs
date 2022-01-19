@@ -1,4 +1,4 @@
-﻿using FinanceAccounting.Application.Common.Models;
+﻿using FinanceAccounting.BusinessLogic.Common.Models;
 using FinanceAccounting.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

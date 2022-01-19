@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using FinanceAccounting.Application.Common.Models;
+using FinanceAccounting.BusinessLogic.Common.Models;
 using FinanceAccounting.DataAccess.Exceptions;
 using FinanceAccounting.Domain.Entities;
 using Microsoft.AspNetCore.Identity;

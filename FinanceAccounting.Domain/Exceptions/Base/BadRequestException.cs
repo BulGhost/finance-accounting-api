@@ -2,7 +2,7 @@
 
 namespace FinanceAccounting.Domain.Exceptions.Base
 {
-    public abstract class BadRequestException : Exception
+    public abstract class BadRequestException : FinanceAccountingException
     {
         protected BadRequestException()
         {

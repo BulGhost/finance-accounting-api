@@ -5,7 +5,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
-using FinanceAccounting.Application.Common.Exceptions;
+using FinanceAccounting.BusinessLogic.Common.Exceptions;
 using FinanceAccounting.Domain.Exceptions.Base;
 using FinanceAccounting.WebApi.ViewModels;
 using FluentValidation;
@@ -37,7 +37,7 @@ using Microsoft.AspNetCore.Http;
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var code = HttpStatusCode.InternalServerError;
             var result = new ErrorDetails { ErrorMessage = exception.Message };
@@ -65,7 +65,7 @@ using Microsoft.AspNetCore.Http;
                     using (var reader = new StreamReader(context.Request.Body))
                     {
                         _logger.LogInformation("Unsuccessful authentication attempt. Request body: {0}",
-                            reader.ReadToEnd());
+                            await reader.ReadToEndAsync());
                     }
 
                     break;
@@ -86,7 +86,7 @@ using Microsoft.AspNetCore.Http;
 
             string response = JsonSerializer.Serialize(result);
 
-            return context.Response.WriteAsync(response);
+            await context.Response.WriteAsync(response);
         }
     }
 }

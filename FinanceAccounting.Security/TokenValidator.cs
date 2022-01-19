@@ -2,10 +2,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading;
 using System.Threading.Tasks;
-using FinanceAccounting.Application.Abstractions.Repo;
-using FinanceAccounting.Application.Abstractions.Security;
-using FinanceAccounting.Application.Common.Models;
-using FinanceAccounting.Application.Users.Commands.RefreshToken;
+using FinanceAccounting.BusinessLogic.Abstractions.Repo;
+using FinanceAccounting.BusinessLogic.Abstractions.Security;
+using FinanceAccounting.BusinessLogic.Common.Models;
+using FinanceAccounting.BusinessLogic.Users.Commands.RefreshToken;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FinanceAccounting.Security

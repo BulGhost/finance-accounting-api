@@ -4,6 +4,7 @@
       <TargetFramework>net5.0</TargetFramework>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	  <NoWarn>1701;1702;1591</NoWarn>
+	  <UserSecretsId>7b4b7be6-d86c-4533-9072-6bfb49724503</UserSecretsId>
   </PropertyGroup>
 
 	<ItemGroup>
@@ -31,7 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FinanceAccounting.DataAccess\FinanceAccounting.DataAccess.csproj" />
-    <ProjectReference Include="..\FinanceAccounting.Application\FinanceAccounting.Application.csproj" />
+    <ProjectReference Include="..\FinanceAccounting.BusinessLogic\FinanceAccounting.BusinessLogic.csproj" />
     <ProjectReference Include="..\FinanceAccounting.Security\FinanceAccounting.Security.csproj" />
   </ItemGroup>
 

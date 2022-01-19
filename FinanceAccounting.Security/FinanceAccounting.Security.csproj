@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FinanceAccounting.Application\FinanceAccounting.Application.csproj" />
+    <ProjectReference Include="..\FinanceAccounting.BusinessLogic\FinanceAccounting.BusinessLogic.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,7 +2,7 @@
 
 namespace FinanceAccounting.Domain.Exceptions.Base
 {
-    public abstract class NotFoundException : Exception
+    public abstract class NotFoundException : FinanceAccountingException
     {
         protected NotFoundException()
         {

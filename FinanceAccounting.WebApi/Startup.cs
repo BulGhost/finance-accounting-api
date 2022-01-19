@@ -3,14 +3,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using FinanceAccounting.Application;
-using FinanceAccounting.Application.Abstractions;
+using FinanceAccounting.BusinessLogic;
+using FinanceAccounting.BusinessLogic.Abstractions;
 using FinanceAccounting.DataAccess;
 using FinanceAccounting.WebApi.Middleware;
 using FinanceAccounting.WebApi.Services;
 using FinanceAccounting.WebApi.ViewModels.HelperClasses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -27,19 +28,20 @@ namespace FinanceAccounting.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication();
+            services.AddBusinessLogic();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDataAccess(connection);
             services.AddTransient<ExceptionHandlingMiddleware>();
             services.AddCors();
             services.AddControllers().AddJsonOptions(opt =>
                 opt.JsonSerializerOptions.Converters.Add(new DateTimeConverter()));
+            services.Configure<RouteOptions>(opt => opt.LowercaseUrls = true);
             services.AddVersionedApiExplorer(opt =>
             {
                 opt.GroupNameFormat = "'v'VVV";
                 opt.SubstituteApiVersionInUrl = true;
             });
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerGenOptionsConfigurator>();
             services.AddSwaggerGen();
             services.AddCustomIdentity();
             services.AddCustomAuthentication(Configuration);
@@ -49,7 +51,7 @@ namespace FinanceAccounting.WebApi
                 opt.DefaultApiVersion = new ApiVersion(1, 0);
                 opt.ReportApiVersions = true;
             });
-            services.AddSingleton<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddHttpContextAccessor();
         }
 
@@ -69,7 +71,7 @@ namespace FinanceAccounting.WebApi
                 });
             }
 
-            app.UseMiddleware<ExceptionHandlingMiddleware>();
+            app.UseCustomExceptionHandler();
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors();

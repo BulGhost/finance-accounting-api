@@ -19,7 +19,7 @@ namespace FinanceAccounting.DataAccess.Migrations
                 .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("FinanceAccounting.Application.Common.Models.RefreshToken", b =>
+            modelBuilder.Entity("FinanceAccounting.BusinessLogic.Common.Models.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -317,7 +317,7 @@ namespace FinanceAccounting.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("FinanceAccounting.Application.Common.Models.RefreshToken", b =>
+            modelBuilder.Entity("FinanceAccounting.BusinessLogic.Common.Models.RefreshToken", b =>
                 {
                     b.HasOne("FinanceAccounting.Domain.Entities.User", null)
                         .WithMany()

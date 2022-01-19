@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
-using FinanceAccounting.Application.Categories.Commands.CreateCategories;
-using FinanceAccounting.Application.Categories.Commands.DeleteCategories;
-using FinanceAccounting.Application.Categories.Commands.UpdateCategories;
-using FinanceAccounting.Application.Categories.Queries.GetListOfCategories;
-using FinanceAccounting.Application.Common.DataTransferObjects.CategoryDto;
+using FinanceAccounting.BusinessLogic.Categories.Commands.CreateCategories;
+using FinanceAccounting.BusinessLogic.Categories.Commands.DeleteCategories;
+using FinanceAccounting.BusinessLogic.Categories.Commands.UpdateCategories;
+using FinanceAccounting.BusinessLogic.Categories.Queries.GetListOfCategories;
+using FinanceAccounting.BusinessLogic.Common.DataTransferObjects.CategoryDto;
 using FinanceAccounting.Domain.Entities;
 using FinanceAccounting.WebApi.Controllers.Base;
 using MediatR;
@@ -76,7 +76,7 @@ namespace FinanceAccounting.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateCategories(
-            [FromBody] CreateCategoryDto[] categories, CancellationToken cancellationToken = default)
+            CreateCategoryDto[] categories, CancellationToken cancellationToken = default)
         {
             var command = new CreateCategoriesCommand(UserId, categories);
             var addedCategories = await Mediator.Send(command, cancellationToken);
@@ -111,7 +111,7 @@ namespace FinanceAccounting.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UpdateCategories(
-            [FromBody] UpdateCategoryDto[] categories, CancellationToken cancellationToken = default)
+            UpdateCategoryDto[] categories, CancellationToken cancellationToken = default)
         {
             var command = new UpdateCategoriesCommand(UserId, categories);
             var updatedCategories = await Mediator.Send(command, cancellationToken);
@@ -139,7 +139,7 @@ namespace FinanceAccounting.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteCategories(
-            [FromBody] int[] categoryIds, CancellationToken cancellationToken = default)
+            int[] categoryIds, CancellationToken cancellationToken = default)
         {
             var command = new DeleteCategoriesCommand(UserId, categoryIds);
             var deletedCategoryIds = await Mediator.Send(command, cancellationToken);

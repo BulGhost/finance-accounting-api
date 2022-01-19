@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using FinanceAccounting.Application.Abstractions.Repo;
-using FinanceAccounting.Application.Common.Models;
+using FinanceAccounting.BusinessLogic.Abstractions.Repo;
+using FinanceAccounting.BusinessLogic.Common.Models;
 
 namespace FinanceAccounting.Security.IntegrationTests
 {

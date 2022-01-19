@@ -5,10 +5,10 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
-using FinanceAccounting.Application.Abstractions.Repo;
-using FinanceAccounting.Application.Abstractions.Security;
-using FinanceAccounting.Application.Common.DataTransferObjects.UserDto;
-using FinanceAccounting.Application.Common.Models;
+using FinanceAccounting.BusinessLogic.Abstractions.Repo;
+using FinanceAccounting.BusinessLogic.Abstractions.Security;
+using FinanceAccounting.BusinessLogic.Common.DataTransferObjects.UserDto;
+using FinanceAccounting.BusinessLogic.Common.Models;
 using FinanceAccounting.Domain.Entities;
 using Microsoft.IdentityModel.Tokens;
 

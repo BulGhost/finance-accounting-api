@@ -3,7 +3,7 @@ using FinanceAccounting.Domain.Exceptions.Base;
 
 namespace FinanceAccounting.Domain.Exceptions
 {
-    public class UserCreationException : BadRequestException
+    public sealed class UserCreationException : BadRequestException
     {
         public UserCreationException()
         {
