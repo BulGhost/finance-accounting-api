@@ -1,7 +1,11 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
 using FinanceAccounting.BusinessLogic.Abstractions;
+using FinanceAccounting.BusinessLogic.Users.Commands.RefreshToken;
+using FinanceAccounting.BusinessLogic.Users.Commands.RegisterUser;
+using FinanceAccounting.BusinessLogic.Users.Queries.AuthenticateUser;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -23,11 +27,31 @@ namespace FinanceAccounting.BusinessLogic.Common.Behaviors
         {
             string requestName = typeof(TRequest).Name;
             int userId = _currentUserService.UserId;
-            string jsonRequest = JsonSerializer.Serialize(request);
+            string requestData = GenerateRequestDataForLogging(request, requestName);
 
-            _logger.LogInformation($"Request: {requestName} with userId={userId} | {jsonRequest}");
-
+            _logger.LogInformation($"Request: {requestName} with userId={userId} | {requestData}");
             return next();
+        }
+
+        private string GenerateRequestDataForLogging(TRequest request, string requestName)
+        {
+            string requestData = JsonSerializer.Serialize(request);
+            var values = JsonSerializer.Deserialize<Dictionary<string, object>>(requestData);
+
+            switch (requestName)
+            {
+                case nameof(RegisterUserCommand):
+                    values!.Remove(nameof(RegisterUserCommand.Password));
+                    values.Remove(nameof(RegisterUserCommand.ConfirmPassword));
+                    return JsonSerializer.Serialize(values);
+                case nameof(AuthenticateUserQuery):
+                    values!.Remove(nameof(AuthenticateUserQuery.Password));
+                    return JsonSerializer.Serialize(values);
+                case nameof(RefreshTokenCommand):
+                    return string.Empty;
+            }
+
+            return requestData;
         }
     }
 }
