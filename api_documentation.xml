@@ -1,0 +1,268 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FinanceAccounting.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:FinanceAccounting.WebApi.Controllers.CategoriesController.GetCategories(FinanceAccounting.Domain.Entities.OperationType,System.Threading.CancellationToken)">
+            <summary>
+            Gets the list of all income or expense categories
+            </summary>
+            <remarks>
+            Sample request:
+                GET /api/categories/0
+            </remarks>
+            <param name="operationType">Type of category (0 - Income, 1 - Expense)</param>
+            <param name="cancellationToken">Optional cancellation token</param>
+            <returns>The list of user categories</returns>
+            <response code="200">Success</response>
+            <response code="400">If the operation type is invalid</response>
+            <response code="401">If the user is unauthorized</response>
+        </member>
+        <member name="M:FinanceAccounting.WebApi.Controllers.CategoriesController.CreateCategories(FinanceAccounting.BusinessLogic.Common.DataTransferObjects.CategoryDto.CreateCategoryDto[],System.Threading.CancellationToken)">
+            <summary>
+            Adds new categories to the user
+            </summary>
+            <remarks>
+            Sample request:
+                POST /api/categories
+                [
+                    {
+                        "type": 0,
+                        "name": "Salary"
+                    },
+                    {
+                        "type": 1,
+                        "name": "Utilities"
+                    }
+                ]
+            </remarks>
+            <param name="categories">Categories to add</param>
+            <param name="cancellationToken">Optional cancellation token</param>
+            <returns>A newly created categories</returns>
+            <response code="201">Success</response>
+            <response code="400">If the categories to be added are invalid.</response>
+            <response code="401">If the user is unauthorized</response>
+        </member>
+        <member name="M:FinanceAccounting.WebApi.Controllers.CategoriesController.UpdateCategories(FinanceAccounting.BusinessLogic.Common.DataTransferObjects.CategoryDto.UpdateCategoryDto[],System.Threading.CancellationToken)">
+            <summary>
+            Updates user categories with the specified ids
+            </summary>
+            <remarks>
+            Sample request:
+                PUT /api/categories
+                [
+                    {
+                        "id": 1,
+                        "name": "Part-time"
+                    },
+                    {
+                        "id": 3,
+                        "name": "Transport"
+                    }
+                ]
+            </remarks>
+            <param name="categories">Categories to update</param>
+            <param name="cancellationToken">Optional cancellation token</param>
+            <returns>Updated categories</returns>
+            <response code="202">Success</response>
+            <response code="400">If the categories to be updated are invalid.</response>
+            <response code="401">If the user is unauthorized</response>
+        </member>
+        <member name="M:FinanceAccounting.WebApi.Controllers.CategoriesController.DeleteCategories(System.Int32[],System.Threading.CancellationToken)">
+            <summary>
+            Deletes user categories with the specified ids
+            </summary>
+            <remarks>
+            Sample request:
+                DELETE /api/categories
+                [
+                    2, 4, 8
+                ]
+            </remarks>
+            <param name="categoryIds">Category ids to delete</param>
+            <param name="cancellationToken">Optional cancellation token</param>
+            <returns>Deleted category ids</returns>
+            <response code="202">Success</response>
+            <response code="400">If the category ids to be deleted are invalid.</response>
+            <response code="401">If the user is unauthorized</response>
+        </member>
+        <member name="M:FinanceAccounting.WebApi.Controllers.OperationsController.GetDaysOperationsReport(System.DateTime,System.Threading.CancellationToken)">
+            <summary>
+            Generates the operations report for the specified date
+            </summary>
+            <remarks>
+            Sample request:
+                GET /api/operations/days-report?date=2022-01-10
+            </remarks>
+            <param name="date">Date on which the report is to be generated</param>
+            <param name="cancellationToken">Optional cancellation token</param>
+            <returns>Total income and expense sum and list of operations for the specified date</returns>
+            <response code="200">Success</response>
+            <response code="400">If the specified date is invalid</response>
+            <response code="401">If the user is unauthorized</response>
+        </member>
+        <member name="M:FinanceAccounting.WebApi.Controllers.OperationsController.GetPeriodsOperationsReport(System.DateTime,System.DateTime,System.Threading.CancellationToken)">
+            <summary>
+            Generates the operations report for the specified period
+            </summary>
+            <remarks>
+            Sample request:
+                GET api/Operations/period-report?startDate=2020-10-10&amp;finalDate=2020-10-11
+            </remarks>
+            <param name="startDate">Start date on which the report is to be generated</param>
+            <param name="finalDate">Final on which the report is to be generated</param>
+            <param name="cancellationToken">Optional cancellation token</param>
+            <returns>Total income and expense sum and list of operations for the specified period</returns>
+            <response code="200">Success</response>
+            <response code="400">If one or both of the specified dates are invalid</response>
+            <response code="401">If the user is unauthorized</response>
+        </member>
+        <member name="M:FinanceAccounting.WebApi.Controllers.OperationsController.AddOperations(FinanceAccounting.BusinessLogic.Common.DataTransferObjects.OperationDto.CreateOperationDto[],System.Threading.CancellationToken)">
+            <summary>
+            Adds new operations to the user
+            </summary>
+            <remarks>
+            Sample request:
+                POST /api/operations
+                [
+                    {
+                        "date": "2022-01-10",
+                        "categoryId": 27,
+                        "sum": 1500,
+                        "details": "Details"
+                    },
+                    {
+                        "date": "2022-01-11",
+                        "categoryId": 38,
+                        "sum": 750
+                    },
+                ]
+            </remarks>
+            <param name="operations">Operations to add</param>
+            <param name="cancellationToken">Optional cancellation token</param>
+            <returns>A newly created operations</returns>
+            <response code="201">Success</response>
+            <response code="400">If the operations to be added are invalid.</response>
+            <response code="401">If the user is unauthorized</response>
+        </member>
+        <member name="M:FinanceAccounting.WebApi.Controllers.OperationsController.UpdateOperations(FinanceAccounting.BusinessLogic.Common.DataTransferObjects.OperationDto.UpdateOperationDto[],System.Threading.CancellationToken)">
+            <summary>
+            Updates user operations with the specified ids
+            </summary>
+            <remarks>
+            Sample request:
+                PUT /api/operations
+                [
+                    {
+                        "id": 42,
+                        "date": "2022-01-08",
+                        "categoryId": 12,
+                        "sum": 1200,
+                        "details": "Details"
+                    },
+                    {
+                        "id": 61,
+                        "date": "2022-01-12",
+                        "categoryId": 8,
+                        "sum": 600
+                    }
+                ]
+            </remarks>
+            <param name="operations">Operations to update</param>
+            <param name="cancellationToken">Optional cancellation token</param>
+            <returns>Updated operations</returns>
+            <response code="202">Success</response>
+            <response code="400">If the operations to be updated are invalid.</response>
+            <response code="401">If the user is unauthorized</response>
+        </member>
+        <member name="M:FinanceAccounting.WebApi.Controllers.OperationsController.DeleteOperations(System.Int32[],System.Threading.CancellationToken)">
+            <summary>
+            Deletes user operations with the specified ids
+            </summary>
+            <remarks>
+            Sample request:
+                DELETE /api/operations
+                [
+                    64, 73, 89
+                ]
+            </remarks>
+            <param name="operationIds">Operation ids to delete</param>
+            <param name="cancellationToken">Optional cancellation token</param>
+            <returns>Deleted operation ids</returns>
+            <response code="202">Success</response>
+            <response code="400">If the operation ids to be deleted are invalid.</response>
+            <response code="401">If the user is unauthorized</response>
+        </member>
+        <member name="M:FinanceAccounting.WebApi.Controllers.UserController.Register(FinanceAccounting.BusinessLogic.Users.Commands.RegisterUser.RegisterUserCommand)">
+            <summary>
+            Creates new application user and adds base income/expense categories to him if required.
+            To add base categories set addBaseCategories equals true (default = false)
+            </summary>
+            <remarks>
+            Sample request:
+                POST /api/register
+                {
+                    "userName": "UserName",
+                    "email": "my.email@mail.com",
+                    "password": "Password123",
+                    "confirmPassword": "Password123",
+                    "addBaseCategories": true
+                }
+            </remarks>
+            <param name="command">New user details including username, email, password and addBaseCategories flag</param>
+            <returns>Created user name and command result</returns>
+            <response code="200">Success</response>
+            <response code="400">If the submitted user details are invalid</response>
+        </member>
+        <member name="M:FinanceAccounting.WebApi.Controllers.UserController.Login(FinanceAccounting.BusinessLogic.Users.Queries.AuthenticateUser.AuthenticateUserQuery)">
+            <summary>
+            Authenticates user with username and password
+            </summary>
+            <remarks>
+            Sample request:
+                POST /api/login
+                {
+                    "userName": "UserName",
+                    "password": "Password123",
+                }
+            </remarks>
+            <param name="query">User authorization data</param>
+            <returns>Username, access and refresh tokens</returns>
+            <response code="200">Success</response>
+            <response code="400">If the authentication details are invalid</response>
+            <response code="401">If the specified password is incorrect</response>
+            <response code="404">If the user with the specified name is not found</response>
+        </member>
+        <member name="M:FinanceAccounting.WebApi.Controllers.UserController.RefreshToken(FinanceAccounting.BusinessLogic.Users.Commands.RefreshToken.RefreshTokenCommand)">
+            <summary>
+            Allows get new access and refresh tokens if the old access token is expired
+            </summary>
+            <remarks>
+            Sample request:
+                POST /api/refresh-token
+                {
+                    "accessToken": "8lkyB6SJRJfE2Eo2Q6oR4Ugk5I1IZ47Z413Ygadq",
+                    "refreshToken": "vkoJ8gWG2Z0BLAsmn8cX"
+                }
+            </remarks>
+            <param name="command">Expired access token and active refresh token</param>
+            <returns>Username, new access and new refresh tokens</returns>
+            <response code="200">Success</response>
+            <response code="400">If one or both of the specified tokens are empty</response>
+            <response code="401">If tokens validation fails</response>
+        </member>
+        <member name="M:FinanceAccounting.WebApi.Controllers.UserController.Logout">
+            <summary>
+            Deletes all issued refresh tokens so that they cannot be used later
+            </summary>
+            <remarks>
+            Sample request:
+                DELETE /api/logout
+            </remarks>
+            <returns>No content</returns>
+            <response code="204">Success</response>
+            <response code="401">If the user is unauthorized</response>
+        </member>
+    </members>
+</doc>
